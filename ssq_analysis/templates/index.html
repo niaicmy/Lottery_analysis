@@ -1,0 +1,80 @@
+{% load staticfiles %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="shortcut icon" href="{% static "image/favicon.ico" %}">
+
+    <title>{% block title %} {{ Title }}{% endblock %}</title>
+    <link rel="stylesheet" type="text/css" href="{% static "css/index.css" %}">
+
+</head>
+<body>
+    <div class="main-box">
+        <header class="header">
+            分析页面
+        </header>
+
+        <div class="main-body">
+
+            <div class="main-left">
+                <ul>
+                    <li>
+                        <a>百度</a>
+                        <ul>
+                            <li><a href="https://www.baidu.com/" target="_blank">百度</a></li>
+                            <li><a href="https://zhidao.baidu.com/" target="_blank">百度知道</a></li>
+                            <li><a href="http://news.baidu.com/" target="_blank">百度新闻</a></li>
+                        </ul>
+                    </li>
+                    <li>
+                        <a>项目2</a>
+                        <ul>
+                            <li><a href="#">项目2-1</a></li>
+                            <li><a href="#">项目2-2</a></li>
+                            <li><a href="#">项目2-3</a></li>
+                        </ul>
+                    </li>
+                    <li>
+                        <a>项目3</a>
+                        <ul>
+                            <li><a href="#">项目3-1</a></li>
+                            <li><a href="#">项目3-2</a></li>
+                            <li><a href="#">项目3-3</a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="main-right">
+
+                <table class="main-table" border="1px" cellpadding="0px" cellspacing="0px">
+                    <caption>{{ model }}</caption>
+                    <tr>
+                        <th>开奖期数</th>
+
+                        {% for num in nums %}
+                        <th>{{ num }}</th>
+                        {% endfor %}
+
+                    </tr>
+
+                    {% for terms in datas %}
+                        <tr>
+                            {% for term in terms %}
+                            <td>{{ term }}</td>
+                            {% endfor %}
+                        </tr>
+                    {% endfor %}
+
+                </table>
+            </div>
+        </div>
+
+        <footer class="footer">
+            这个是页脚
+        </footer>
+    </div>
+</body>
+</html>
