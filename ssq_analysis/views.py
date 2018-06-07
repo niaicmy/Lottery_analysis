@@ -5,3 +5,7 @@ from django.shortcuts import render
 
 def index(request):
     return render(request, "index.html")
+
+
+def ssq(request):
+    return render(request, "ssq.html")

@@ -1,10 +1,47 @@
+{% load staticfiles %}
+
 <!DOCTYPE html>
-<html lang="en">
+{#<html lang="en">#}
+<html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="shortcut icon" href="{% static "image/favicon.ico" %}">
+
+    <title>{% block title %} {{ Title }} {% endblock %}</title>
+    <link rel="stylesheet" type="text/css" href="{% static "bootstrap/bootstrap.css" %}">
+
+    {% block css %}
+        <link rel="stylesheet" type="text/css" href="{% static "css/index.css" %}">
+    {% endblock %}
+
+    <!-- HTML5 shim 和 Respond.js 是为了让 IE8 支持 HTML5 元素和媒体查询（media queries）功能 -->
+    <!-- 警告：通过 file:// 协议（就是直接将 html 页面拖拽到浏览器中）访问页面时 Respond.js 不起作用 -->
+    <!--[if lt IE 9]>
+      <script type="text/javascript" src="{% static "js/html5shiv-printshiv.min.js" %}"></script>
+      <script type="text/javascript" src="{% static "js/respond.min.js" %}"></script>
+    <![endif]-->
+
 </head>
 <body>
+<div class="container">
+    <nav role="navigation">
+        <ul class="nav nav-justified nav-pills">
+            <li><a href="index.html">主页</a></li>
+            <li><a href="ssq.html">双色球</a></li>
+            <li><a>待开发</a></li>
+            <li><a>待开发</a></li>
+            <li><a>关于</a></li>
+        </ul>
+    </nav>
+    {% block test %}
 
+    {% endblock %}
+</div>
+
+
+<script type="text/javascript" src="{% static "bootstrap/jquery-3.3.1.js" %}"></script>
+<script type="text/javascript" src="{% static "bootstrap/bootstrap.js" %}"></script>
 </body>
 </html>

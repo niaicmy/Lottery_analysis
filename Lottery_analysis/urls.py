@@ -21,4 +21,5 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('', ssq_analysis.views.index, name="index"),
     path('index.html', ssq_analysis.views.index, name="index"),
+    path('ssq.html', ssq_analysis.views.ssq, name="ssq"),
 ]
