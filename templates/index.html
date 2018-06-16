@@ -32,42 +32,62 @@
 <body>
 <nav class="navbar navbar-default navbar-fixed-top" role="navigation">
     <div class="container-fluid">
-        <div class="navbar-header">
-            <a href="#" class="navbar-brand">LOGO图片</a>
-            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#coll"
-                    aria-expanded="false">
-                <span class="sr-only">折叠collapse</span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-            </button>
-        </div>
-        <div class="collapse navbar-collapse" id="coll">
-            <ul class="nav nav-pills" style="margin-top: 5px">
-                <li><a>首页</a></li>
-                <li><a>双色球</a></li>
-                <li><a>福彩3D</a></li>
-                <li class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" role="button"
-                                        aria-haspopup="true" aria-expanded="false">更多<span class="caret"></span></a>
-                    <ul class="dropdown-menu">
-                        <li><a>12</a></li>
-                        <li><a>22</a></li>
-                        <li><a>32</a></li>
-                        <li><a>42</a></li>
+        <div class="row">
+            <div class="col-sm-6">
+                <div class="navbar-header">
+                    <a class="navbar-brand" href={% url "index" %}>LOGO图片</a>
+                    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#coll"
+                            aria-expanded="false">
+                        <span class="sr-only">折叠collapse</span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                </div>
+                <div class="collapse navbar-collapse" id="coll">
+                    <ul class="nav nav-pills navbar-nav" style="margin-top: 5px">
+                        <li><a href={% url "index" %}>首页</a></li>
+                        <li><a href={% url "ssq" type=1 %}>双色球</a></li>
+                        <li><a href="#">福彩3D</a></li>
+                        <li class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" role="button"
+                                                aria-haspopup="true" aria-expanded="false">更多<span class="caret"></span></a>
+                            <ul class="dropdown-menu">
+                                <li><a>12</a></li>
+                                <li><a>22</a></li>
+                                <li><a>32</a></li>
+                                <li><a>42</a></li>
+                            </ul>
+                        </li>
+                        <li><a href="#">关于</a></li>
                     </ul>
-                </li>
-                <li><a>关于</a></li>
-            </ul>
-        </div>
-        <div>
-            <form class="navbar-form navbar-right">
-                <input type="text" id="search" class="form-control">
-                <label for="search" class="input-group-addon"><span class="glyphicon glyphicon-search"></span></label>
-            </form>
+                </div>
+
+            </div>
+            <div class="col-sm-4">
+                <form class="navbar navbar-form navbar-right" role="search" method="get" action={% url "search" %}>
+                    {% csrf_token %}
+                    <div class="input-group">
+                        <input type="text" id="search" class="form-control" placeholder="Search" name="skw">
+
+                        <label class="control-label" for="search">
+                            <span class="glyphicon glyphicon-search form-control-feedback"></span>
+                        </label>
+                    </div>
+                    <input type="submit" class="navbar-btn form-control" value="submit">
+                </form>
+            </div>
         </div>
     </div>
 </nav>
-111111111111111111111111111111
+
+{% block left-body %}
+    首页预览 左分块
+{% endblock %}
+
+{% block right-body %}
+    首页预览 右分块
+{% endblock %}
+
 <script type="text/javascript" src="{% static "bootstrap/jquery-3.3.1.js" %}"></script>
 <script type="text/javascript" src="{% static "bootstrap/bootstrap.js" %}"></script>
 </body>

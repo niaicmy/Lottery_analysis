@@ -1,5 +1,61 @@
 {% extends "index.html" %}
 
-{% block test %}
-    <h2>这是ssq 页面</h2>
-{% endblock %}
+<div class="container-fluid">
+    <div class="row">
+        {% block left-body %}
+            <div class="col-md-2">
+                <ul class="nav nav-stacked nav-">
+                    <li><a href={% url "ssq" 3 %}>红球/蓝球</a></li>
+                    <li><a href="#">222</a></li>
+                    <li><a href="#">2</a></li>
+                    <li><a href="#">2222</a></li>
+                    <li><a href="#">2</a></li>
+                    <li><a href="#">2222</a></li>
+                    <li><a href="#">2</a></li>
+                    <li><a href="#">2222</a></li>
+
+                </ul>
+            </div>
+        {% endblock %}
+
+        {% block right-body %}
+            <div class="col-md-10">
+                <table class="table table-bordered table-hover table-striped table-condensed">
+                    <thead>
+                    <tr>
+                        <th>期数</th>
+                        {% for i in num %}
+                            <th>{{ i }}</th>
+                        {% endfor %}
+                    </tr>
+                    </thead>
+
+                    <tbody>
+                        {% for i in records %}
+                            <tr>
+                            {% for foo in i %}
+                                {% if foo >= 10 %}
+                                    <td class="danger">{{ foo }}</td>
+                                    {% elif foo < 10 and foo >= 5 %}
+                                    <td class="warning">{{ foo }}</td>
+                                    {% elif foo == 0 %}
+                                    <td class="success">{{ foo }}</td>
+                                    {% else %}
+                                    <td>{{ foo }}</td>
+                                {% endif %}
+                            {% endfor %}
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+
+                    <tfoot>
+                    <tr>
+                        {# 合并行 #}
+                        <td colspan="34">footer</td>
+                    </tr>
+                    </tfoot>
+                </table>
+            </div>
+        {% endblock %}
+    </div>
+</div>

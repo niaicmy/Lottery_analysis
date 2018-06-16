@@ -21,5 +21,6 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('', ssq_analysis.views.index, name="index"),
     path('index.html', ssq_analysis.views.index, name="index"),
-    path('ssq.html', ssq_analysis.views.ssq, name="ssq"),
+    path('ssq.html/(?P<type>[0-9]?)', ssq_analysis.views.ssq, name="ssq"),
+    path('', ssq_analysis.views.search, name="search"),
 ]
