@@ -18,9 +18,11 @@ from django.urls import path
 import ssq_analysis.views
 
 urlpatterns = [
-    path('admin/', admin.site.urls),
-    path('', ssq_analysis.views.index, name="index"),
-    path('index.html', ssq_analysis.views.index, name="index"),
-    path('ssq.html/(?P<type>[0-9]?)', ssq_analysis.views.ssq, name="ssq"),
-    path('', ssq_analysis.views.search, name="search"),
+    path(r'admin/', admin.site.urls),
+    path(r'', ssq_analysis.views.index, name="index"),
+    path(r'index/', ssq_analysis.views.index, name="index"),
+    # path(r'ssq/(?P<model>[0-9]{1})', ssq_analysis.views.ssq, name="ssq"),
+    # path(r'ssq/<str:model>/', ssq_analysis.views.ssq, name="ssq"),
+    path(r'ssq/<str:model>/', ssq_analysis.views.ssq, name="ssq"),
+    path(r'', ssq_analysis.views.search, name="search"),
 ]

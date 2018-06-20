@@ -4,9 +4,9 @@
     <div class="row">
         {% block left-body %}
             <div class="col-md-2">
-                <ul class="nav nav-stacked nav-">
-                    <li><a href={% url "ssq" 3 %}>红球/蓝球</a></li>
-                    <li><a href="#">222</a></li>
+                <ul class="nav nav-stacked nav-pills">
+                    <li><a href={% url "ssq" "red" %}>红球</a></li>
+                    <li><a href={% url "ssq" "blue" %}>蓝球</a></li>
                     <li><a href="#">2</a></li>
                     <li><a href="#">2222</a></li>
                     <li><a href="#">2</a></li>

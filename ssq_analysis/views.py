@@ -12,18 +12,20 @@ red = [str(i) for i in range(10, 34)]
 blue = [str(i) for i in range(10, 17)]
 
 
-def ssq(request, type):
+# 设置 model 来切换显示
+def ssq(request, model):
     data = dict()
     # type 设置显示红球还是篮球
     data["type"] = True
     data["num"] = None
+    # print(model)
 
     data["records"] = [("18001", 1, 2, 3, 6, 9), ("18002", 0, 3, 0), ("18003", 11, 3, 0)]
 
-    if data["type"]:
-        data["num"] = lt10 + red
-    else:
+    if "blue" == model:
         data["num"] = lt10 + blue
+    elif "red" == model:
+        data["num"] = lt10 + red
 
     return render(request, "ssq.html", context=data)
 
