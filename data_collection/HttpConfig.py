@@ -1,8 +1,8 @@
 # 通常我们在发送请求时都需要带上请求头，请求头是将自身伪装成浏览器的关键，常见的有用的请求头如下
 # Host
-# Referer             #大型网站通常都会根据该参数判断请求的来源
+# Referer        #大型网站通常都会根据该参数判断请求的来源
 # User-Agent     #客户端
-# Cookie             #Cookie信息包含在请求头里，requests模块有单独的参数来处理他，处理后headers={}内就可以不用放置
+# Cookie         #Cookie信息包含在请求头里，requests模块有单独的参数来处理他，处理后headers={}内就可以不用放置
 
 
 import random

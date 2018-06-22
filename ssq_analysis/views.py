@@ -28,6 +28,10 @@ def ssq(request, model):
         data["num"] = lt10 + red
 
     return render(request, "ssq.html", context=data)
+    # return render(request, "ssq.html", {
+    #     "records": "",
+    #     "num": "",
+    # })
 
 
 def search(request):

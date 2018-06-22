@@ -1,2 +1,0 @@
-class HtmlOutputer(object):
-    pass
