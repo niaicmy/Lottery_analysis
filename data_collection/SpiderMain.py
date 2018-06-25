@@ -1,16 +1,35 @@
 import requests
-import aiohttp
+# import aiohttp
+from lxml import etree
 import json
 import random
-from ssq_analysis.models import SsqInfo
+# from ssq_analysis.models import SsqInfo
 
-with open(file="Httpconfig.json", mode="r", encoding="utf-8") as fp:
-    config = json.load(fp)
-    fp.close()
+
+# mode默认false 表示读取文件 更新文件时 update 设置为更新的json 对象
+def openconfig(path, update=None):
+    if update:
+        try:
+            with open(file=path, mode=r"w+", encoding=r"utf-8") as fp:
+                json.dump(update, fp)
+                fp.close()
+                # print(path + " : update done")
+        except IOError as e:
+            print(path + " : update file fail !" + e)
+    else:
+        try:
+            with open(file=path, mode=r"r", encoding=r"utf-8") as fp:
+                mycon = json.load(fp)
+                fp.close()
+                # print(path + " : open done")
+        except IOError as e:
+            print(path + " : open file fail !" + e)
+        else:
+            return mycon
 
 
 # 动态生成requests 的 headers参数
-def get_header():
+def get_header(config):
     # 随机一个拼凑 header
     headers = {'User-Agent': random.choice(config["headers"])}
     # print(headers)
@@ -18,50 +37,59 @@ def get_header():
 
 
 # 动态生成requests 的 proxy参数
-def get_proxy():
-    # proxy = "http://user:pass@some.proxy.com"
+def get_proxy(config):
+    # proxies = {
+    # "http":"http://user:password@127.0.0.1:9999"
+    # }
+    # t = random.choice(config["proxy"])
+    proxy = dict()
     t = random.choice(config["proxy"])
     if "" == t["user"]:
-        proxy = str(t["mold"]).lower() + r"://" + t["host"] + ":" + t["port"]
+        proxy[str(t["mold"]).lower()] = str(t["mold"]).lower() + r"://" + t["host"] + ":" + t["port"]
     else:
-        proxy = str(t["mold"]).lower() + r"://" + t["user"] + t["pwd"] + "@" + t["host"] + ":" + t["port"]
+        proxy[str(t["mold"]).lower()] = str(t["mold"]).lower() + r"://" + t["user"] + t["pwd"] + "@" + t["host"] + ":" + t["port"]
     # print(proxy)
     return proxy
 
 
-class DownLoader(object):
-    def __init__(self, url=None):
-        if url:
-            super().__init__()
-            self.url = url
-        else:
-            print('downloader url 错误！')
-
-    def down(self):
-        req = requests.get(url=self.url, headers=get_header())
-        if req.ok:
-            req.encoding = req.apparent_encoding
-            return req.text
-        else:
-            req.raise_for_status()
-
-
-class AsyncDownLoader(object):
-    def __init__(self, url=None):
-        if url:
-            super().__init__()
-            self.url = url
-        else:
-            print('downloader url 错误！')
-
-    async def down(self):
-        async with aiohttp.ClientSession as session:
-            async with session.get(url=self.url, headers=get_header()) as req:
-                if req.ok:
-                    req.encoding = req.apparent_encoding
-                    return await req.text()
-                else:
-                    req.raise_for_status()
+def get_parser(config, who="lottery"):
+    t = dict()
+    t["url"] = config["parser"][who]["url"]
+    t["path"] = config["parser"][who]["path"]
+    return t
+# class DownLoader(object):
+#     def __init__(self, url=None):
+#         if url:
+#             super().__init__()
+#             self.url = url
+#         else:
+#             print('downloader url 错误！')
+#
+#     def down(self):
+#         req = requests.get(url=self.url, headers=get_header())
+#         if req.ok:
+#             req.encoding = req.apparent_encoding
+#             return req.text
+#         else:
+#             req.raise_for_status()
+#
+#
+# class AsyncDownLoader(object):
+#     def __init__(self, url=None):
+#         if url:
+#             super().__init__()
+#             self.url = url
+#         else:
+#             print('downloader url 错误！')
+#
+#     async def down(self):
+#         async with aiohttp.ClientSession as session:
+#             async with session.get(url=self.url, headers=get_header()) as req:
+#                 if req.ok:
+#                     req.encoding = req.apparent_encoding
+#                     return await req.text()
+#                 else:
+#                     req.raise_for_status()
 
 # 自动更新 Http config proxy
 # with open(file="Httpconfig.json", mode="a+", encoding="utf-8") as fp:
@@ -69,6 +97,39 @@ class AsyncDownLoader(object):
 #     fp.close()
 
 
+# p表示要解析的对象 c表示配置文件json对象
+def parser(path, who):
+    """path: 配置文件路径"""
+
+    config = openconfig(path)
+    tem = get_parser(config, who)
+
+    if "lottery" == who:
+        # 表示取的期数
+        req = requests.get(tem["url"].format(18001), headers=get_header(config), proxies=get_proxy(config))
+        if req.ok:
+            html = etree.HTML(req.text)
+            # print(html.xpath(tem["path"]))
+            # ['01', '08', '11', '26', '28', '31', '04']
+            return html.xpath(tem["path"])
+
+    elif "proxy" == who:
+        # 这里是表示第几页
+        req = requests.get(tem["url"].format(1), headers=get_header(config), proxies=get_proxy(config))
+        if req.ok:
+            html = etree.HTML(req.text)
+            # print(html.xpath(tem["path"]))
+            # 表示取第几个数据 一页共20个
+            # ['125.117.120.229', '9000', '高匿名', 'HTTP', '浙江省金华市  电信', '3秒', '2018-06-25 15:30:46']
+            return html.xpath(tem["path"].format(2))
+
+    # if req.ok:
+    #     html = etree.HTML(req.text)
+    #     # print(html.xpath(tem["path"]))
+    #     return html.xpath(tem["path"])
+
+
 if __name__ == '__main__':
-    get_header()
-    get_proxy()
+    print(parser("Httpconfig.json", "lottery"))
+    print(parser("Httpconfig.json", "proxy"))
+    # 打开配置文件

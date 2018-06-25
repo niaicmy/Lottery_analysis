@@ -59,15 +59,13 @@
     }
   ],
   "parser": {
-    "parser-lottery": {
-      "url": "kaijiang.500.com/shtml/ssq/{0}.shtml",
-      "port": "",
-      "path": ""
+    "lottery": {
+      "url": "https://kaijiang.500.com/shtml/ssq/{0}.shtml",
+      "path": "//div[@class=\"ball_box01\"]/ul/li/text()"
     },
-    "parser-proxy": {
+    "proxy": {
       "url": "https://www.kuaidaili.com/free/inha/{0}/",
-      "port": "",
-      "path": ""
+      "path": "//div[@id=\"list\"]/table/tbody/tr[{0}]/td/text()"
     }
   }
 }
