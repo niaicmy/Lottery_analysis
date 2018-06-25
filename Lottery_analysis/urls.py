@@ -21,6 +21,7 @@ urlpatterns = [
     path(r'admin/', admin.site.urls),
     path(r'', ssq_analysis.views.index, name="index"),
     path(r'index/', ssq_analysis.views.index, name="index"),
+    path(r'update/', ssq_analysis.views.update, name="update"),
     # path(r'ssq/(?P<model>[0-9]{1})', ssq_analysis.views.ssq, name="ssq"),
     # path(r'ssq/<str:model>/', ssq_analysis.views.ssq, name="ssq"),
     path(r'ssq/<str:model>/', ssq_analysis.views.ssq, name="ssq"),

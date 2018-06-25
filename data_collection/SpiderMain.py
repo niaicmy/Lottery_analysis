@@ -3,7 +3,6 @@ import requests
 from lxml import etree
 import json
 import random
-# from ssq_analysis.models import SsqInfo
 
 
 # mode默认false 表示读取文件 更新文件时 update 设置为更新的json 对象
@@ -47,7 +46,8 @@ def get_proxy(config):
     if "" == t["user"]:
         proxy[str(t["mold"]).lower()] = str(t["mold"]).lower() + r"://" + t["host"] + ":" + t["port"]
     else:
-        proxy[str(t["mold"]).lower()] = str(t["mold"]).lower() + r"://" + t["user"] + t["pwd"] + "@" + t["host"] + ":" + t["port"]
+        proxy[str(t["mold"]).lower()] = str(t["mold"]).lower() + r"://" + t["user"] + t["pwd"]\
+                                        + "@" + t["host"] + ":" + t["port"]
     # print(proxy)
     return proxy
 
@@ -98,30 +98,49 @@ def get_parser(config, who="lottery"):
 
 
 # p表示要解析的对象 c表示配置文件json对象
-def parser(path, who):
-    """path: 配置文件路径"""
+def parser(path, who, num):
+    """
+    path: 配置文件路径
+    who: 解析那一个数据
+    con: 附加参数 与 who 相关联
+    """
 
     config = openconfig(path)
-    tem = get_parser(config, who)
+    par = get_parser(config, who)
 
     if "lottery" == who:
         # 表示取的期数
-        req = requests.get(tem["url"].format(18001), headers=get_header(config), proxies=get_proxy(config))
+        req = requests.get(par["url"].format(num), headers=get_header(config), proxies=get_proxy(config))
         if req.ok:
             html = etree.HTML(req.text)
             # print(html.xpath(tem["path"]))
             # ['01', '08', '11', '26', '28', '31', '04']
-            return html.xpath(tem["path"])
+            li = html.xpath(par["path"])
+            # print(li)
+            if '{Result2}' == li[0]:
+                # print("ssq No data ! or The data is the latest !")
+                # 可以这样 检查2-4 次 返回 None 的结果来判断 期数是不是最新 当然可以同步数据库 只检测最新期数
+                return None
+            else:
+                return li
 
     elif "proxy" == who:
         # 这里是表示第几页
-        req = requests.get(tem["url"].format(1), headers=get_header(config), proxies=get_proxy(config))
+        req = requests.get(par["url"].format(num), headers=get_header(config), proxies=get_proxy(config))
         if req.ok:
             html = etree.HTML(req.text)
             # print(html.xpath(tem["path"]))
             # 表示取第几个数据 一页共20个
             # ['125.117.120.229', '9000', '高匿名', 'HTTP', '浙江省金华市  电信', '3秒', '2018-06-25 15:30:46']
-            return html.xpath(tem["path"].format(2))
+            tem = list()
+
+            for i in range(1, 21):
+                pro = html.xpath(par["path"].format(i))
+                if int(pro[5][0]) < 2:
+                    tem.append(pro)
+                elif len(tem) >= 5:
+                    break
+            return tem
 
     # if req.ok:
     #     html = etree.HTML(req.text)
@@ -130,6 +149,6 @@ def parser(path, who):
 
 
 if __name__ == '__main__':
-    print(parser("Httpconfig.json", "lottery"))
-    print(parser("Httpconfig.json", "proxy"))
+    print(parser("Httpconfig.json", "lottery", 18001))
+    print(parser("Httpconfig.json", "proxy", 1))
     # 打开配置文件
