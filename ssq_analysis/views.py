@@ -1,6 +1,9 @@
-from django.shortcuts import render, HttpResponse
+from django.shortcuts import render, HttpResponse, HttpResponseRedirect
+from django.contrib import messages
+from django.urls import reverse
 from data_collection.SpiderMain import parser
 from .models import SsqInfo, SsqNum
+
 # Create your views here.
 
 
@@ -14,36 +17,34 @@ blue = [str(i) for i in range(10, 17)]
 
 
 def update(request):
-    # todo: update data 不知道取的值是不是最新的
     # 17155 -- 18001
-    num = SsqNum.objects.order_by("number")[0] + 1
+    message = ""
+    sp = SsqNum.objects.values("number").last()
+    num = dict(sp)["number"]
     count = 0
-    print(num)
 
     while num:
-        lottery = parser("Httpconfig.json", "lottery", num)
+        num += 1
+        lottery = parser("lottery", num)
         if lottery:
-            ssqtem = SsqNum()
-            ssqtem.number = num
-            ssqtem.red1 = lottery[0]
-            ssqtem.red2 = lottery[1]
-            ssqtem.red3 = lottery[2]
-            ssqtem.red4 = lottery[3]
-            ssqtem.red5 = lottery[4]
-            ssqtem.red6 = lottery[5]
-            ssqtem.red7 = lottery[6]
-            ssqtem.save()
+            # print("data coming ...")
+            dic = {'number': num, 'red1': lottery[0], 'red2': lottery[1], 'red3': lottery[2], 'red4': lottery[3],
+                   'red5': lottery[4], 'red6': lottery[5], 'blue': lottery[6]}
+            SsqNum.objects.create(**dic)
         else:
             count += 1
             if count == 2:
                 num = (num - (num % 1000)) + 1000
-                count += 1
             elif count == 3:
+                message = "The data is the latest !"
                 break
-
-            num += 1
-
-    proxy = parser("Httpconfig.json", "proxy", 1)
+    # 更新 proxy
+    parser("proxy", 1)
+    # 跳转加反向解析
+    # todo: https://docs.djangoproject.com/zh-hans/2.0/ref/contrib/messages/
+    messages.success(request, "Your data has been saved!")
+    messages.success(request, "The data is the latest !")
+    return HttpResponseRedirect(reverse("ssq", args=["red"]))
 
 
 # 设置 model 来切换显示
