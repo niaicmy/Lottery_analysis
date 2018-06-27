@@ -10,7 +10,14 @@
                     <li><a href={% url "ssq" "red" %}>红球</a></li>
                     <li><a href={% url "ssq" "blue" %}>蓝球</a></li>
                 </ul>
-                <div class="text-danger"><p>{{ message }}</p></div>
+                {% if messages %}
+                    {% for message in messages %}
+                        <div {% if message.tags %} class="{{ message.tags }}" {% endif %}>
+                            <p>{{ message }}</p>
+                        </div>
+                    {% endfor %}
+                {% endif %}
+                {# <div class="text-danger"><p>{{ message }}</p></div>#}
             </div>
         {% endblock %}
 
@@ -47,7 +54,7 @@
                     <tfoot>
                     <tr>
                         {# 合并行 #}
-                        <td colspan="34">footer</td>
+                        <td colspan="34" class="text-muted">一长串的说明</td>
                     </tr>
                     </tfoot>
                 </table>

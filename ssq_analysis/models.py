@@ -5,6 +5,8 @@ from django.db import models
 class SsqInfo(models.Model):
     # 开奖期数
     number = models.PositiveIntegerField(primary_key=True)
+    # 一个SsqNum记录 对应一个SsqInfo记录
+    # ssq_num = models.OneToOneField("SsqNum", on_delete=models.CASCADE, to_field="number")
 
     red01 = models.PositiveIntegerField()
     red02 = models.PositiveIntegerField()
@@ -57,6 +59,10 @@ class SsqInfo(models.Model):
     blue15 = models.PositiveIntegerField()
     blue16 = models.PositiveIntegerField()
 
+    class Meta:
+        # db_table = "ssq_info"
+        ordering = ["number"]
+
 
 class SsqNum(models.Model):
     number = models.PositiveIntegerField(primary_key=True)
@@ -68,3 +74,10 @@ class SsqNum(models.Model):
     red5 = models.CharField(max_length=2)
     red6 = models.CharField(max_length=2)
     blue = models.CharField(max_length=2)
+    # ssqinfo = models.ForeignKey("SsqInfo", on_delete=models.CASCADE)
+    # 一个SsqNum记录 对应一个SsqInfo记录
+    # ssqinfo = models. OneToOneField("SsqInfo", on_delete=models.CASCADE)
+
+    class Meta:
+        # db_table = "ssq_num"
+        ordering = ["number"]
