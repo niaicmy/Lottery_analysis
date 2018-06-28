@@ -1,64 +1,87 @@
 {% extends "index.html" %}
 {% load staticfiles %}
 
-<div class="container-fluid">
-    <div class="row">
-        {% block left-body %}
-            <div class="col-md-2">
-                <ul class="nav nav-stacked nav-pills">
-                    <li><a class="btn-primary" href={% url "update" %}>更新数据</a></li>
-                    <li><a href={% url "ssq" "red" %}>红球</a></li>
-                    <li><a href={% url "ssq" "blue" %}>蓝球</a></li>
-                </ul>
-                {% if messages %}
-                    {% for message in messages %}
-                        <div {% if message.tags %} class="{{ message.tags }}" {% endif %}>
-                            <p>{{ message }}</p>
-                        </div>
-                    {% endfor %}
-                {% endif %}
-                {# <div class="text-danger"><p>{{ message }}</p></div>#}
-            </div>
-        {% endblock %}
-
-        {% block right-body %}
-            <div class="col-md-10">
-                <table class="table table-bordered table-hover table-striped table-condensed">
-                    <thead>
-                    <tr>
-                        <th>期数</th>
-                        {% for i in num %}
-                            <th>{{ i }}</th>
+{% block main %}
+    <div class="container-fluid">
+        <div class="row">
+            {% block left-body %}
+                <div class="col-md-2">
+                    <ul class="nav nav-stacked nav-pills">
+                        <li><a href={% url "ssq" "red" 1 %}>红球</a></li>
+                        <li><a href={% url "ssq" "blue" 1 %}>蓝球</a></li>
+                        <li><a class="text-info" href={% url "update" %}>更新数据</a></li>
+                    </ul>
+                    {% if messages %}
+                        {% for message in messages %}
+                            <div {% if message.tags %} class="{{ message.tags }}" {% endif %}>
+                                <p>{{ message }}</p>
+                            </div>
                         {% endfor %}
-                    </tr>
-                    </thead>
+                    {% endif %}
+                    {# <div class="text-danger"><p>{{ message }}</p></div>#}
+                </div>
+            {% endblock %}
 
-                    <tbody>
-                    {% for i in records %}
+            {% block right-body %}
+                <div class="col-md-10">
+                    <table class="table table-bordered table-hover table-striped table-condensed">
+                        <thead>
                         <tr>
-                            {% for foo in i %}
-                                {% if foo >= 10 %}
-                                    <td class="danger">{{ foo }}</td>
-                                {% elif foo < 10 and foo >= 5 %}
-                                    <td class="warning">{{ foo }}</td>
-                                {% elif foo == 0 %}
-                                    <td class="success">{{ foo }}</td>
-                                {% else %}
-                                    <td>{{ foo }}</td>
-                                {% endif %}
+                            <th>期数</th>
+                            {% for i in num %}
+                                <th>{{ i }}</th>
                             {% endfor %}
                         </tr>
-                    {% endfor %}
-                    </tbody>
+                        </thead>
 
-                    <tfoot>
-                    <tr>
-                        {# 合并行 #}
-                        <td colspan="34" class="text-muted">一长串的说明</td>
-                    </tr>
-                    </tfoot>
-                </table>
-            </div>
-        {% endblock %}
+                        <tbody>
+                        {% for i in records %}
+                            <tr>
+                                {% for foo in i %}
+                                    {% if foo >= 10 %}
+                                        <td class="danger">{{ foo }}</td>
+                                    {% elif foo < 10 and foo >= 5 %}
+                                        <td class="warning">{{ foo }}</td>
+                                    {% elif foo == 0 %}
+                                        <td class="success">{{ foo }}</td>
+                                    {% else %}
+                                        <td>{{ foo }}</td>
+                                    {% endif %}
+                                {% endfor %}
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+
+                        <tfoot>
+                        <tr>
+                            {# 合并行 #}
+                            <td colspan="34" class="text-muted">一长串的说明</td>
+                        </tr>
+                        </tfoot>
+                    </table>
+                    {#  TODO: 翻页的代码  Ajax #}
+                    <div class="col-md-4 col-md-offset-5">
+                        <ul class="pagination" id="pagination">
+                            {% if num|length > 20 %}
+                                <li class="disabled"><a href={% url "ssq" "blue" 1 %}>&laquo; Prev</a>
+                                <li class="active"><a href={% url "ssq" "red" 1 %}>01</a></li>
+                                <li><a href={% url "ssq" "red" 2 %}>02</a></li>
+                                <li><a href={% url "ssq" "red" 3 %}>03</a></li>
+                                <li><a href={% url "ssq" "blue" 1 %}>Next &raquo;</a></li>
+                            {% else %}
+                                <li class="disabled"><a href={% url "ssq" "blue" 1 %}>&laquo; Prev</a>
+                                <li class="active"><a href={% url "ssq" "blue" 1 %}>01</a></li>
+                                <li><a href={% url "ssq" "blue" 2 %}>02</a></li>
+                                <li><a href={% url "ssq" "blue" 3 %}>03</a></li>
+                                <li><a href={% url "ssq" "blue" 1 %}>Next &raquo;</a></li>
+                            {% endif %}
+                        </ul>
+                    </div>
+                </div>
+            {% endblock %}
+        </div>
     </div>
-</div>
+{% endblock %}
+{% block script %}
+    <script type="text/javascript" src="{% static "js/ssq.js" %}"></script>
+{% endblock %}

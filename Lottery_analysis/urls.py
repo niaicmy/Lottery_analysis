@@ -24,6 +24,6 @@ urlpatterns = [
     path(r'update/', ssq_analysis.views.update, name="update"),
     # path(r'ssq/(?P<model>[0-9]{1})', ssq_analysis.views.ssq, name="ssq"),
     # path(r'ssq/<str:model>/', ssq_analysis.views.ssq, name="ssq"),
-    path(r'ssq/<str:model>/', ssq_analysis.views.ssq, name="ssq"),
+    path(r'ssq/<str:model>/<int:page>/', ssq_analysis.views.ssq, name="ssq"),
     path(r'', ssq_analysis.views.search, name="search"),
 ]

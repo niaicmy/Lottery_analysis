@@ -1,7 +1,11 @@
 from django.db import models
 
-
 # Create your models here.
+# 注意：Django 1.7 及以上的版本需要连续执行以下命令
+# python manage.py makemigrations
+# python manage.py migrate
+
+
 class SsqInfo(models.Model):
     # 开奖期数
     number = models.PositiveIntegerField(primary_key=True)

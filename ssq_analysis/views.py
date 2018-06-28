@@ -20,6 +20,7 @@ def update(request):
     # 最先更新 proxy
     parser("proxy", 1)
     ssq_num = SsqNum.objects.values("number").last()
+    # print(ssq_num)
     num = dict(ssq_num)["number"]
     # count 是计算 lottery 失败次数
     count = 0
@@ -89,7 +90,7 @@ def update(request):
 
 
 # 设置 model 来切换显示
-def ssq(request, model):
+def ssq(request, model, page):
     data = dict()
     data["num"] = None
     # type 设置显示红球还是篮球
@@ -102,26 +103,26 @@ def ssq(request, model):
     info = list(SsqInfo.objects.all().values_list())
     # print(info)
     # print(type(info))
-    # data["records"] = []
+    data["records"] = []
     # data["records"] = [("18001", 1, 2, 3, 6, 9), ("18002", 0, 3, 0), ("18003", 11, 3, 0)]
-    tempinfo = []
+    # tempinfo = []
     if "blue" == model:
         data["num"] = lt10 + blue
         for i in info:
             # print(type(i[0]))
             # 注意这个元组的坑 int TypeError: 'int' object is not iterable
             t = (i[0],) + i[34:50]
-            tempinfo.append(t)
+            data["records"].append(t)
 
     elif "red" == model:
         data["num"] = lt10 + red
         for p in info:
             # print(type(p[0]))
             t2 = (p[0],) + p[1:34]
-            tempinfo.append(t2)
+            data["records"].append(t2)
 
     # print(tempinfo)
-    data["records"] = tempinfo
+    # data["records"] = tempinfo
     # =======================以下是显示原始数据======================================
     # sp = SsqNum.objects.all().values_list()
     # print(sp)
