@@ -38,12 +38,23 @@ def get_page_total():
     else:
         _page_total = page_tem[0]
 
-    return range(1, _page_total + 1)
+    return list(range(1, _page_total + 1))
 
 
 # 初始化 设置全局的 page_total
 page_total = get_page_total()
+# print(page_total)
 
+
+def show_page(current_page, show_dec=2):
+    page_list = list(range(current_page - show_dec, current_page + show_dec + 1))
+    # print(page_list)
+    # 列表反向遍历 正向 删除有问题
+    for p in page_list[::-1]:
+        if p not in page_total:
+            page_list.remove(p)
+    # print(page_list)
+    return page_list
 
 # ===========================================================
 
@@ -53,6 +64,7 @@ def index(request):
 
 
 def update(request):
+    global ssq_num_all, ssq_info_all, page_total
     # 17155 -- 18001
     message = "Update fail !"
     # 最先更新 proxy
@@ -127,19 +139,21 @@ def update(request):
     messages.success(request, message, extra_tags="text-danger")
 
     # 最后使用最新数据
-    global ssq_num_all, ssq_info_all, page_total
+    # global ssq_num_all, ssq_info_all, page_total
     ssq_info_all = SsqInfo.objects.all().values_list()
     ssq_num_all = SsqNum.objects.all().values_list()
     page_total = get_page_total()
 
-    return HttpResponseRedirect(reverse("ssq", args=["red"]))
+    return HttpResponseRedirect(reverse("ssq", args=["red", 1]))
 
 
 # 设置 model 来切换显示
 def ssq(request, model, page):
     data = dict()
     data["head"] = []
-    data["page_info"] = {"page_total": page_total, "current_page": page}
+    # data["page_info"] = {"show_page": show_page(page), "current_page": page}
+    data["page_info"] = [show_page(page), page]
+    # print(data["page_info"])
     # type 设置显示红球还是篮球
     # data["type"] = True
     # print(model)
@@ -173,6 +187,7 @@ def ssq(request, model, page):
     # =======================以下是显示原始数据======================================
     # sp = SsqNum.objects.all().values_list()
     # print(sp)
+    # print(data)
     return render(request, "ssq.html", context=data)
     # return render(request, "ssq.html", {
     #     "records": "",

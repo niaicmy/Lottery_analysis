@@ -63,20 +63,22 @@
                     <div class="col-md-4 col-md-offset-5">
                         <ul class="pagination" id="pagination">
                             {% if num|length > 20 %}
+                                <li><a>ssd</a></li>
 
+                                {% comment %}
                                 {% ifequal page_info.current_page "1" %}
-                                    <li class="active"><a href={% url "ssq" "red" 1 %}>01</a></li>
+                                    <li class="active"><a href={% url "ssq" "red" 1 %}>1</a></li>
 
                                     {% if page_info.page_total|length_is:"1" %}
                                         <li class="disabled"><a href="javascript:void(0);">Next &raquo;</a></li>
                                     {% else %}
                                         {% if page_info.page_total|length > 6 %}
                                             {% for page in page_info.page_total|slice:"1:7" %}
-                                                <li><a href={% url "ssq" "red" page %}>0{{ page }}</a></li>
+                                                <li><a href={% url "ssq" "red" page %}>{{ page }}</a></li>
                                             {% endfor %}
                                         {% else %}
                                             {% for page in page_info.page_total %}
-                                                <li><a href={% url "ssq" "red" page %}>0{{ page }}</a></li>
+                                                <li><a href={% url "ssq" "red" page %}>{{ page }}</a></li>
                                             {% endfor %}
                                         {% endif %}
 
@@ -88,22 +90,79 @@
                                     <li><a href={% url "ssq" "red" page_info.current_page|add:"-1" %}>&laquo; Prev</a>
                                     </li>
                                     {# ================================#}
-                                    {% for page in page_info.page_total|slice:"page_info.current_page|add:-1:page_info.current_page|add:2"%}
+                                    {% ifequal page_info.current_page "2" %}
+                                        <li><a href={% url "ssq" "red" page|add:"-1" %}>{{ page|add:"-1" }}</a></li>
+                                        <li class="active"><a href={% url "ssq" "red" page %}>{{ page }}</a></li>
+                                        <li><a href={% url "ssq" "red" page|add:"1" %}>{{ page|add:"1" }}</a></li>
+                                        <li><a href={% url "ssq" "red" page|add:"2" %}>{{ page|add:"2" }}</a></li>
+                                        <li><a href={% url "ssq" "red" page|add:"2" %}>{{ page|add:"3" }}</a></li>
+                                        {% else %}
+                                        <li><a href={% url "ssq" "red" page|add:"-2" %}>{{ page|add:"-2" }}</a></li>
+                                        <li><a href={% url "ssq" "red" page|add:"-1" %}>{{ page|add:"-1" }}</a></li>
+                                        <li class="active"><a href={% url "ssq" "red" page %}>{{ page }}</a></li>
+                                        <li><a href={% url "ssq" "red" page|add:"1" %}>{{ page|add:"1" }}</a></li>
+                                        <li><a href={% url "ssq" "red" page|add:"2" %}>{{ page|add:"2" }}</a></li>
+                                    {% endifequal %}
+
+                                    {% for page in page_info.page_total|slice:"page_info.current_page|add:-1:page_info.current_page|add:2" %}
                                     {% endfor %}
 
-                                    {% ifequal page_info.current_page page_info.page_total|length%}
+                                    {% ifequal page_info.current_page page_info.page_total|length %}
                                         <li class="disabled"><a href="javascript:void(0);">Next &raquo;</a></li>
                                     {% else %}
                                         <li><a href={% url "ssq" "red" page|add:"1" %}>Next &raquo;</a></li>
                                     {% endifequal %}
                                 {% endif %}
-
+                            {% endcomment %}
+                                {% comment %}
                             {% else %}
-                                <li class="disabled"><a href={% url "ssq" "blue" 1 %}>&laquo; Prev</a>
-                                <li class="active"><a href={% url "ssq" "blue" 1 %}>01</a></li>
-                                <li><a href={% url "ssq" "blue" 2 %}>02</a></li>
-                                <li><a href={% url "ssq" "blue" 3 %}>03</a></li>
-                                <li><a href={% url "ssq" "blue" 1 %}>Next &raquo;</a></li>
+                                {% ifequal page_info.current_page "1" %}
+                                    <li class="disabled"><a href="javascript:void(0);">&laquo; Prev</a>
+
+                                        {% for page in page_info.show_page %}
+                                            {% ifequal page page_info.current_page %}
+                                                <li class="active"><a
+                                                        href={% url "ssq" "blue" page_info.current_page %}> {{ page_info.current_page }} </a>
+                                                </li>
+                                            {% else %}
+                                                <li><a href={% url "ssq" "blue" page %}> {{ page }} </a></li>
+                                            {% endifequal %}
+                                        {% endfor %}
+
+                                    <li><a href={% url "ssq" "blue" page|add:"1" %}>Next &raquo;</a></li>
+                                {% endifequal %}
+
+                                {% if page_info.current_page > 1 and page_info.current_page < page_info.show_page|slice:"-1" %}
+                                    <li><a href={% url "ssq" "blue" page_info.current_page|add:"-1" %}>&laquo; Prev</a>
+
+                                        {% for page in page_info.show_page %}
+                                            {% ifequal page page_info.current_page %}
+                                                <li class="active"><a
+                                                        href={% url "ssq" "blue" page_info.current_page %}> {{ page_info.current_page }} </a>
+                                                </li>
+                                            {% else %}
+                                                <li><a href={% url "ssq" "blue" page %}> {{ page }} </a></li>
+                                            {% endifequal %}
+                                        {% endfor %}
+
+                                    <li><a href={% url "ssq" "blue" page|add:"1" %}>Next &raquo;</a></li>
+                                {% endif %}
+
+                                {% ifequal page_info.current_page page_info.show_page|slice:"-1" %}
+                                    <li><a href={% url "ssq" "blue" page_info.current_page|add:"-1" %}>&laquo; Prev</a>
+
+                                        {% for page in page_info.show_page %}
+                                            {% ifequal page page_info.current_page %}
+                                                <li class="active"><a
+                                                        href={% url "ssq" "blue" page_info.current_page %}> {{ page_info.current_page }} </a>
+                                                </li>
+                                            {% else %}
+                                                <li><a href={% url "ssq" "blue" page %}> {{ page }} </a></li>
+                                            {% endifequal %}
+                                        {% endfor %}
+                                    <li class="disabled"><a href="javascript:void(0);">Next &raquo;</a></li>
+                                {% endifequal %}
+                                {% endcomment %}
                             {% endif %}
                         </ul>
                     </div>
