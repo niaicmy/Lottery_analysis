@@ -65,7 +65,7 @@ class SsqInfo(models.Model):
 
     class Meta:
         # db_table = "ssq_info"
-        ordering = ["number"]
+        ordering = ["-number"]
 
 
 class SsqNum(models.Model):
@@ -84,4 +84,4 @@ class SsqNum(models.Model):
 
     class Meta:
         # db_table = "ssq_num"
-        ordering = ["number"]
+        ordering = ["-number"]

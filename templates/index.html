@@ -7,20 +7,20 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="shortcut icon" href="{% static "image/favicon.ico" %}">
+    <link rel="shortcut icon" href="{% static 'image/favicon.ico' %}">
 
     <title>{% block title %} {{ Title }} {% endblock %}</title>
-    <link rel="stylesheet" type="text/css" href="{% static "bootstrap/bootstrap.css" %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'bootstrap/bootstrap.css' %}">
 
     {% block css %}
-        <link rel="stylesheet" type="text/css" href="{% static "css/index.css" %}">
+        <link rel="stylesheet" type="text/css" href="{% static 'css/index.css' %}">
     {% endblock %}
 
     <!-- HTML5 shim 和 Respond.js 是为了让 IE8 支持 HTML5 元素和媒体查询（media queries）功能 -->
     <!-- 警告：通过 file:// 协议（就是直接将 html 页面拖拽到浏览器中）访问页面时 Respond.js 不起作用 -->
     <!--[if lt IE 9]>
-      <script type="text/javascript" src="{% static "js/html5shiv-printshiv.min.js" %}"></script>
-      <script type="text/javascript" src="{% static "js/respond.min.js" %}"></script>
+      <script type="text/javascript" src="{% static 'js/html5shiv-printshiv.min.js' %}"></script>
+      <script type="text/javascript" src="{% static 'js/respond.min.js' %}"></script>
     <![endif]-->
     <style>
         body {
@@ -35,7 +35,7 @@
         <div class="row">
             <div class="col-sm-6">
                 <div class="navbar-header">
-                    <a class="navbar-brand" href="{% url "index" %}">LOGO图片</a>
+                    <a class="navbar-brand" href="{% url 'index' %}">LOGO图片</a>
                     <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#coll"
                             aria-expanded="false">
                         <span class="sr-only">折叠collapse</span>
@@ -46,8 +46,8 @@
                 </div>
                 <div class="collapse navbar-collapse" id="coll">
                     <ul class="nav nav-pills navbar-nav" style="margin-top: 5px">
-                        <li><a href="{% url "index" %}">首页</a></li>
-                        <li><a href="{% url "ssq" "red" 1 %}">双色球</a></li>
+                        <li><a href="{% url 'index' %}">首页</a></li>
+                        <li><a href="{% url 'ssq' 'red' 1 %}">双色球</a></li>
                         <li><a href="#">福彩3D</a></li>
                         <li class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" role="button"
                                                 aria-haspopup="true" aria-expanded="false">更多<span class="caret"></span></a>
@@ -64,7 +64,7 @@
 
             </div>
             <div class="col-sm-4">
-                <form class="navbar navbar-form navbar-right" role="search" method="get" action="{% url "search" %}">
+                <form class="navbar navbar-form navbar-right" role="search" method="get" action="{% url 'search' %}">
                     {% csrf_token %}
                     <div class="input-group">
                         <input type="text" id="search" class="form-control" placeholder="Search" name="skw">
@@ -89,8 +89,8 @@
     {% endblock %}
 {% endblock %}
 
-<script type="text/javascript" src="{% static "bootstrap/jquery-3.3.1.js" %}"></script>
-<script type="text/javascript" src="{% static "bootstrap/bootstrap.js" %}"></script>
+<script type="text/javascript" src="{% static 'bootstrap/jquery-3.3.1.js' %}"></script>
+<script type="text/javascript" src="{% static 'bootstrap/bootstrap.js' %}"></script>
 
 {% block script %}
 

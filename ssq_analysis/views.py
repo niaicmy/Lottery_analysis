@@ -3,6 +3,7 @@ from django.contrib import messages
 from django.urls import reverse
 from data_collection.SpiderMain import parser
 from .models import SsqInfo, SsqNum
+# import time
 
 # Create your views here.
 lt10 = ["01", "02", "03", "04", "05", "06", "07", "08", "09"]
@@ -27,7 +28,7 @@ ssq_num_all = SsqNum.objects.all().values_list()
 # 以下是分页机制 ================================================
 # page_limit : 每一页显示数据量
 page_limit = 40
-# page_limit = 3
+# page_limit = 2
 
 
 def get_page_total():
@@ -85,8 +86,8 @@ def update(request):
         # +++++++++++
         # 测试用
         # print(ssq_num)
-        if ssq_num == 17005:
-            break
+        # if ssq_num == 17008:
+        #     break
         # +++++++++++++
 
         # ==========解析数据内容============
@@ -149,6 +150,7 @@ def update(request):
 
 # 设置 model 来切换显示
 def ssq(request, model, page):
+    # time.sleep(2)
     data = dict()
     data["head"] = []
     data["page_info"] = {"show_page": show_page(page), "current_page": page}

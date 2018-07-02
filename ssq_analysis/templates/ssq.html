@@ -7,9 +7,9 @@
             {% block left-body %}
                 <div class="col-md-2">
                     <ul class="nav nav-stacked nav-pills">
-                        <li><a href="{% url "ssq" "red" 1 %}">红球</a></li>
-                        <li><a href="{% url "ssq" "blue" 1 %}">蓝球</a></li>
-                        <li><a class="text-info" href="{% url "update" %}">更新数据</a></li>
+                        <li><a href="{% url 'ssq' 'red' 1 %}">红球</a></li>
+                        <li><a href="{% url 'ssq' 'blue' 1 %}">蓝球</a></li>
+                        <li><a class="text-info" href="{% url 'update' %}">更新数据</a></li>
                     </ul>
                     {% if messages %}
                         {% for message in messages %}
@@ -60,7 +60,7 @@
                         </tfoot>
                     </table>
                     {#  TODO: 翻页的代码  Ajax #}
-                    <div class="col-md-4 col-md-offset-5">
+                    <div class="col-md-4 col-md-offset-4">
                         <ul class="pagination" id="pagination">
                             {% if head|length > 20 %}
 
@@ -70,32 +70,32 @@
                                         {% for page in page_info.show_page %}
                                             {% if page == page_info.current_page %}
                                                 <li class="active"><a
-                                                        href="{% url "ssq" "red" page %}"> {{ page }} </a>
+                                                        href="{% url 'ssq' 'red' page %}"> {{ page }} </a>
                                                 </li>
                                             {% else %}
-                                                <li><a href="{% url "ssq" "red" page %}"> {{ page }} </a></li>
+                                                <li><a href="{% url 'ssq' 'red' page %}"> {{ page }} </a></li>
                                             {% endif %}
                                         {% endfor %}
-                                    {# {% url 'ssq' "red" page_info.current_page|add:1 as the_url %}#}
+
                                     {% if page_info.show_page|length_is:1 %}
                                         <li class="disabled"><a href="javascript:void (0);">Next &raquo;</a>
                                         </li>
                                     {% else %}
-                                        <li><a href="{% url 'ssq' "red" page_info.current_page|add:1 %}">Next
+                                        <li><a href="{% url 'ssq' 'red' page_info.current_page|add:1 %}">Next
                                             &raquo;</a>
                                         </li>
                                     {% endif %}
-
                                 {% elif page_info.current_page > 1 and page_info.current_page <= page_info.show_page|last %}
-                                    <li><a href="{% url "ssq" "red" page_info.current_page|add:-1 %}">&laquo; Prev</a>
+
+                                    <li><a href="{% url 'ssq' 'red' page_info.current_page|add:-1 %}">&laquo; Prev</a>
 
                                         {% for page in page_info.show_page %}
                                             {% if page == page_info.current_page %}
                                                 <li class="active"><a
-                                                        href="{% url "ssq" "red" page %}"> {{ page }} </a>
+                                                        href="{% url 'ssq' 'red' page %}"> {{ page }} </a>
                                                 </li>
                                             {% else %}
-                                                <li><a href="{% url "ssq" "red" page %}"> {{ page }} </a></li>
+                                                <li><a href="{% url 'ssq' 'red' page %}"> {{ page }} </a></li>
                                             {% endif %}
                                         {% endfor %}
 
@@ -103,21 +103,24 @@
                                         <li class="disabled"><a href="javascript:void(0);">Next &raquo;</a>
                                         </li>
                                     {% else %}
-                                        <li><a href="{% url "ssq" "red" page|add:1 %}">Next &raquo;</a></li>
+                                        <li>
+                                        <a href="{% url 'ssq' 'red' page_info.current_page|add:1 %}">Next &raquo;</a>
                                     {% endif %}
+
                                 {% endif %}
 
                             {% else %}
+
                                 {% if page_info.current_page == 1 %}
                                     <li class="disabled"><a href="javascript:void(0);">&laquo; Prev</a>
 
                                         {% for page in page_info.show_page %}
                                             {% if page == page_info.current_page %}
                                                 <li class="active"><a
-                                                        href="{% url "ssq" "blue" page %}"> {{ page }} </a>
+                                                        href="{% url 'ssq' 'blue' page %}"> {{ page }} </a>
                                                 </li>
                                             {% else %}
-                                                <li><a href="{% url "ssq" "blue" page %}"> {{ page }} </a></li>
+                                                <li><a href="{% url 'ssq' 'blue' page %}"> {{ page }} </a></li>
                                             {% endif %}
                                         {% endfor %}
 
@@ -125,21 +128,21 @@
                                         <li class="disabled"><a href="javascript:void (0);">Next &raquo;</a>
                                         </li>
                                     {% else %}
-                                        <li><a href="{% url 'ssq' "blue" page_info.current_page|add:1 %}">Next
+                                        <li><a href="{% url 'ssq' 'blue' page_info.current_page|add:1 %}">Next
                                             &raquo;</a>
                                         </li>
                                     {% endif %}
-
                                 {% elif page_info.current_page > 1 and page_info.current_page <= page_info.show_page|last %}
-                                    <li><a href="{% url "ssq" "blue" page_info.current_page|add:-1 %}">&laquo; Prev</a>
+
+                                    <li><a href="{% url 'ssq' 'blue' page_info.current_page|add:-1 %}">&laquo; Prev</a>
 
                                         {% for page in page_info.show_page %}
                                             {% if page == page_info.current_page %}
                                                 <li class="active"><a
-                                                        href="{% url "ssq" "blue" page_info.current_page %}"> {{ page_info.current_page }} </a>
+                                                        href="{% url 'ssq' 'blue' page %}"> {{ page }} </a>
                                                 </li>
                                             {% else %}
-                                                <li><a href="{% url "ssq" "blue" page %}"> {{ page }} </a></li>
+                                                <li><a href="{% url 'ssq' 'blue' page %}"> {{ page }} </a></li>
                                             {% endif %}
                                         {% endfor %}
 
@@ -147,9 +150,12 @@
                                         <li class="disabled"><a href="javascript:void(0);">Next &raquo;</a>
                                         </li>
                                     {% else %}
-                                        <li><a href="{% url "ssq" "blue" page|add:"1" %}">Next &raquo;</a></li>
+                                        <li>
+                                        <a href="{% url 'ssq' 'blue' page_info.current_page|add:1 %}">Next &raquo;</a>
                                     {% endif %}
+
                                 {% endif %}
+
                             {% endif %}
                         </ul>
                     </div>
