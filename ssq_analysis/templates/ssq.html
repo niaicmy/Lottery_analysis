@@ -10,7 +10,24 @@
                         <li><a href="{% url 'ssq' 'red' 1 %}">红球</a></li>
                         <li><a href="{% url 'ssq' 'blue' 1 %}">蓝球</a></li>
                         <li><a class="text-info" href="{% url 'update' %}">更新数据</a></li>
+                        <li><a class="text-info">请选择数据进行组合:</a></li>
                     </ul>
+                    <div>
+                        <form action="" method="post" class="form-inline " role="form">
+                            {% csrf_token %}
+
+                            {% for num in head %}
+                                <div class="form-group ">
+
+                                    <label class="checkbox-inline" for="{{ num }}">{{ num }}:</label>
+                                </div>
+                                <div class="form-group ">
+                                    <input type="checkbox" value="{{ num }}" id="{{ num }}">
+                                </div>
+                            {% endfor %}
+
+                        </form>
+                    </div>
                     {% if messages %}
                         {% for message in messages %}
                             <div {% if message.tags %} class="{{ message.tags }}" {% endif %}>
@@ -20,6 +37,7 @@
                     {% endif %}
                     {# <div class="text-danger"><p>{{ message }}</p></div>#}
                 </div>
+
             {% endblock %}
 
             {% block right-body %}
@@ -52,15 +70,15 @@
                         {% endfor %}
                         </tbody>
 
-                        <tfoot>
-                        <tr>
-                            {# 合并行 #}
-                            <td colspan="34" class="text-muted">一长串的说明</td>
-                        </tr>
-                        </tfoot>
+                        {#                        <tfoot>#}
+                        {#                        <tr>#}
+                        {# 合并行 #}
+                        {#                            <td colspan="34" class="text-muted">一长串的说明</td>#}
+                        {#                        </tr>#}
+                        {#                        </tfoot>#}
                     </table>
                     {#  TODO: 翻页的代码  Ajax #}
-                    <div class="col-md-4 col-md-offset-4">
+                    <div class="col-md-5 col-md-offset-4">
                         <ul class="pagination" id="pagination">
                             {% if head|length > 20 %}
 
@@ -111,50 +129,50 @@
 
                             {% else %}
 
-                                {% if page_info.current_page == 1 %}
-                                    <li class="disabled"><a href="javascript:void(0);">&laquo; Prev</a>
+                            {% if page_info.current_page == 1 %}
+                                <li class="disabled"><a href="javascript:void(0);">&laquo; Prev</a>
 
-                                        {% for page in page_info.show_page %}
-                                            {% if page == page_info.current_page %}
-                                                <li class="active"><a
-                                                        href="{% url 'ssq' 'blue' page %}"> {{ page }} </a>
-                                                </li>
-                                            {% else %}
-                                                <li><a href="{% url 'ssq' 'blue' page %}"> {{ page }} </a></li>
-                                            {% endif %}
-                                        {% endfor %}
+                                    {% for page in page_info.show_page %}
+                                        {% if page == page_info.current_page %}
+                                            <li class="active"><a
+                                                    href="{% url 'ssq' 'blue' page %}"> {{ page }} </a>
+                                            </li>
+                                        {% else %}
+                                            <li><a href="{% url 'ssq' 'blue' page %}"> {{ page }} </a></li>
+                                        {% endif %}
+                                    {% endfor %}
 
-                                    {% if page_info.show_page|length_is:1 %}
-                                        <li class="disabled"><a href="javascript:void (0);">Next &raquo;</a>
-                                        </li>
-                                    {% else %}
-                                        <li><a href="{% url 'ssq' 'blue' page_info.current_page|add:1 %}">Next
-                                            &raquo;</a>
-                                        </li>
-                                    {% endif %}
-                                {% elif page_info.current_page > 1 and page_info.current_page <= page_info.show_page|last %}
-
-                                    <li><a href="{% url 'ssq' 'blue' page_info.current_page|add:-1 %}">&laquo; Prev</a>
-
-                                        {% for page in page_info.show_page %}
-                                            {% if page == page_info.current_page %}
-                                                <li class="active"><a
-                                                        href="{% url 'ssq' 'blue' page %}"> {{ page }} </a>
-                                                </li>
-                                            {% else %}
-                                                <li><a href="{% url 'ssq' 'blue' page %}"> {{ page }} </a></li>
-                                            {% endif %}
-                                        {% endfor %}
-
-                                    {% if page_info.current_page == page_info.show_page|last %}
-                                        <li class="disabled"><a href="javascript:void(0);">Next &raquo;</a>
-                                        </li>
-                                    {% else %}
-                                        <li>
-                                        <a href="{% url 'ssq' 'blue' page_info.current_page|add:1 %}">Next &raquo;</a>
-                                    {% endif %}
-
+                                {% if page_info.show_page|length_is:1 %}
+                                    <li class="disabled"><a href="javascript:void (0);">Next &raquo;</a>
+                                    </li>
+                                {% else %}
+                                    <li><a href="{% url 'ssq' 'blue' page_info.current_page|add:1 %}">Next
+                                        &raquo;</a>
+                                    </li>
                                 {% endif %}
+                            {% elif page_info.current_page > 1 and page_info.current_page <= page_info.show_page|last %}
+
+                                <li><a href="{% url 'ssq' 'blue' page_info.current_page|add:-1 %}">&laquo; Prev</a>
+
+                                    {% for page in page_info.show_page %}
+                                        {% if page == page_info.current_page %}
+                                            <li class="active"><a
+                                                    href="{% url 'ssq' 'blue' page %}"> {{ page }} </a>
+                                            </li>
+                                        {% else %}
+                                            <li><a href="{% url 'ssq' 'blue' page %}"> {{ page }} </a></li>
+                                        {% endif %}
+                                    {% endfor %}
+
+                                {% if page_info.current_page == page_info.show_page|last %}
+                                    <li class="disabled"><a href="javascript:void(0);">Next &raquo;</a>
+                                    </li>
+                                {% else %}
+                                    <li>
+                                    <a href="{% url 'ssq' 'blue' page_info.current_page|add:1 %}">Next &raquo;</a>
+                                {% endif %}
+
+                            {% endif %}
 
                             {% endif %}
                         </ul>

@@ -27,7 +27,7 @@ ssq_num_all = SsqNum.objects.all().values_list()
 
 # 以下是分页机制 ================================================
 # page_limit : 每一页显示数据量
-page_limit = 40
+page_limit = 15
 # page_limit = 2
 
 
