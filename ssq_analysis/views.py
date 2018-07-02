@@ -27,6 +27,7 @@ ssq_num_all = SsqNum.objects.all().values_list()
 # 以下是分页机制 ================================================
 # page_limit : 每一页显示数据量
 page_limit = 40
+# page_limit = 3
 
 
 def get_page_total():
@@ -56,9 +57,8 @@ def show_page(current_page, show_dec=2):
     # print(page_list)
     return page_list
 
+
 # ===========================================================
-
-
 def index(request):
     return render(request, "index.html")
 
@@ -151,8 +151,8 @@ def update(request):
 def ssq(request, model, page):
     data = dict()
     data["head"] = []
-    # data["page_info"] = {"show_page": show_page(page), "current_page": page}
-    data["page_info"] = [show_page(page), page]
+    data["page_info"] = {"show_page": show_page(page), "current_page": page}
+    # data["page_info"] = [show_page(page), page]
     # print(data["page_info"])
     # type 设置显示红球还是篮球
     # data["type"] = True
@@ -161,7 +161,11 @@ def ssq(request, model, page):
     # (17001, 6, 2, 5, 4, 4, 3, 1, 2, 1, 10, 0, 9, 4, 0, 8, 1, 8, 7, 9, 0, 4, 2, 5, 1, 0, 0, 10, 7, 1, 6, 7, 5, 3,
     # blue 34-49 [34:50]
     # 24, 23, 15, 35, 4, 1, 2, 32, 33, 8, 51, 7, 11, 17, 0, 27)
-    info = list(ssq_info_all)
+    # page * page_limit 不能超过 ssq_info_all 的最大长度
+    if page * page_limit <= len(ssq_info_all):
+        info = list(ssq_info_all)[(page - 1) * page_limit:page * page_limit]
+    else:
+        info = list(ssq_info_all)[(page - 1) * page_limit:len(ssq_info_all)]
     # print(info)
     # print(type(info))
     data["records"] = []

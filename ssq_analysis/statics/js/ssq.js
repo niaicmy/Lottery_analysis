@@ -1,9 +1,10 @@
 $(function () {
     // alert("ssq.html js is ok !");
     $("#pagination>li").on("click", function () {
-        alert("click li");
+        // alert("click li");
     })
 });
+
 /*
 // 分页插件： http://www.php.cn/js-tutorial-348268.html
 function f1() {

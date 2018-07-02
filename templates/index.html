@@ -35,7 +35,7 @@
         <div class="row">
             <div class="col-sm-6">
                 <div class="navbar-header">
-                    <a class="navbar-brand" href={% url "index" %}>LOGO图片</a>
+                    <a class="navbar-brand" href="{% url "index" %}">LOGO图片</a>
                     <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#coll"
                             aria-expanded="false">
                         <span class="sr-only">折叠collapse</span>
@@ -46,8 +46,8 @@
                 </div>
                 <div class="collapse navbar-collapse" id="coll">
                     <ul class="nav nav-pills navbar-nav" style="margin-top: 5px">
-                        <li><a href={% url "index" %}>首页</a></li>
-                        <li><a href={% url "ssq" "red" 1 %}>双色球</a></li>
+                        <li><a href="{% url "index" %}">首页</a></li>
+                        <li><a href="{% url "ssq" "red" 1 %}">双色球</a></li>
                         <li><a href="#">福彩3D</a></li>
                         <li class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" role="button"
                                                 aria-haspopup="true" aria-expanded="false">更多<span class="caret"></span></a>
@@ -64,7 +64,7 @@
 
             </div>
             <div class="col-sm-4">
-                <form class="navbar navbar-form navbar-right" role="search" method="get" action={% url "search" %}>
+                <form class="navbar navbar-form navbar-right" role="search" method="get" action="{% url "search" %}">
                     {% csrf_token %}
                     <div class="input-group">
                         <input type="text" id="search" class="form-control" placeholder="Search" name="skw">
@@ -81,15 +81,17 @@
 </nav>
 {% block main %}
     {% block left-body %}
-        首页预览 左分块
+
     {% endblock %}
 
     {% block right-body %}
-        首页预览 右分块
+
     {% endblock %}
 {% endblock %}
+
 <script type="text/javascript" src="{% static "bootstrap/jquery-3.3.1.js" %}"></script>
 <script type="text/javascript" src="{% static "bootstrap/bootstrap.js" %}"></script>
+
 {% block script %}
 
 {% endblock %}
