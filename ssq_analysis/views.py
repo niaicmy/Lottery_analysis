@@ -71,7 +71,9 @@ def update(request):
     # 最先更新 proxy
     parser("proxy", 1)
     # ssq_num 代表开奖期数
-    ssq_num = ssq_num_all[len(ssq_num_all) - 1][0]
+    # ssq_num = ssq_num_all[len(ssq_num_all) - 1][0]
+    ssq_num = ssq_num_all[0][0]
+    # print(ssq_num)
     # ssq_num = SsqNum.objects.values("number").last()
     # print(ssq_num)
     # count 是计算 lottery 失败次数
@@ -199,6 +201,20 @@ def ssq(request, model, page):
     #     "records": "",
     #     "num": "",
     # })
+
+
+def composite_data(request):
+    data = dict(request.POST)
+    # data = request.REQUEST["red"]
+    print(data)
+    # red_t = getattr(data, "red", None)
+    # blue_t = getattr(data, "blue", None)
+    red_t = data.get("red", None)
+    blue_t = data.get("blue", None)
+    print(red_t)
+    print(blue_t)
+    return HttpResponse(None)
+    pass
 
 
 def search(request):

@@ -2,8 +2,36 @@ $(function () {
     // alert("ssq.html js is ok !");
     $("#pagination>li").on("click", function () {
         // alert("click li");
-    })
+    });
+
+    let check_status = [];
+    // TODO: checkbox 状态记忆
+
+    $("input[type='checkbox']").on("click", function () {
+        if (!($(this).val() in check_status)) {
+            check_status.push($(this).val());
+            // alert("in push");
+            alert(check_status)
+        }
+        else {
+            check_status.remove($(this).val());
+            alert("in remove");
+            alert(check_status)
+        }
+        // alert("checkbox click. ")
+    });
+
+    // alert(check_status)
 });
+
+Array.prototype.remove= function ( val ) {
+    if (this.length<=0 ||this === undefined){
+        return false
+    }
+    else{
+        this.splice(this.indexOf(val), 1)
+    }
+};
 
 /*
 // 分页插件： http://www.php.cn/js-tutorial-348268.html
