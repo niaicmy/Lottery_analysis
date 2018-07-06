@@ -1,34 +1,68 @@
+let red_status = [];
+let blue_status = [];
+
 $(function () {
     // alert("ssq.html js is ok !");
-    $("#pagination>li").on("click", function () {
-        // alert("click li");
+    // $("#pagination>li").on("click", function () {
+    //     // alert("click li");
+    // });
+
+    html_load();
+    check_num(red_status, 'red');
+    check_num(blue_status, 'blue');
+
+    // 离开页面事件处理
+    // todo: 离开页面事件没作用
+    $(window).unload(function () {
+        // Cookies.set("red", red_status);
+        // Cookies.set("blue", blue_status);
+        // window.sessionStorage.setItem("red", red_status);
+        window.sessionStorage.red = red_status;
+        window.sessionStorage.blue = blue_status;
     });
 
-    let check_status = [];
-    // TODO: checkbox 状态记忆
+});
 
-    $("input[type='checkbox']").on("click", function () {
-        if (!($(this).val() in check_status)) {
+// 进入页面事件处理
+function html_load() {
+    // 读取cookie 加载数据
+    // red_status = Cookies.get("red");
+    // blue_status = Cookies.get("blue");
+    red_status = window.sessionStorage.getItem("red");
+    blue_status = window.sessionStorage.getItem("blue");
+    alert(red_status);
+    alert(blue_status);
+}
+
+
+// checkbox 状态设置
+function check_num(check_status, who) {
+    $("input[name= who]".replace("who", who)).on("change", function () {
+        // alert($(this).val());
+        // alert(check_status);
+        // alert($.inArray($(this).val(), check_status));
+        if ($.inArray($(this).val(), check_status) < 0) {
+            // alert($(this).val());
             check_status.push($(this).val());
             // alert("in push");
-            alert(check_status)
+            // alert(check_status)
         }
         else {
             check_status.remove($(this).val());
-            alert("in remove");
-            alert(check_status)
+            // alert("in remove");
+            // alert(check_status)
         }
+        // alert(who +":" + check_status)
         // alert("checkbox click. ")
     });
+}
 
-    // alert(check_status)
-});
-
-Array.prototype.remove= function ( val ) {
-    if (this.length<=0 ||this === undefined){
+Array.prototype.remove = function (val) {
+    if (this.length <= 0 || this === undefined) {
         return false
     }
-    else{
+    else {
+        // 删除一个点击存在的数据
         this.splice(this.indexOf(val), 1)
     }
 };
