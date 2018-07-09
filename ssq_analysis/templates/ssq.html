@@ -55,9 +55,10 @@
                                 {% endfor %}
                             </div>
 
-
                             <div class="text-center">
-                                <input type="submit" value="提交数据" class="form-control" onclick="">
+                            {#    <input type="submit" value="提交数据" class="form-control" onclick="my_submit()">#}
+                            {# 这里有个坑 下面的提交 需要 return my_submit  直接写 submit 不能正常工作的#}
+                                <input type="submit" value="提交数据" class="form-control" onclick="return my_submit()">
                             </div>
                         </form>
                     </div>
@@ -73,9 +74,16 @@
                         <thead>
                         <tr>
                             <th>期数</th>
+                        {% if mark == 1 %}
                             {% for i in head %}
                                 <th>{{ i }}</th>
                             {% endfor %}
+                            {% elif mark == 2 %}
+                            {% for i in head|slice:"0:16" %}
+                                <th>{{ i }}</th>
+                            {% endfor %}
+                        {% endif %}
+
                         </tr>
                         </thead>
 

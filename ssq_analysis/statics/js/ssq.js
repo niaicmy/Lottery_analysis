@@ -1,38 +1,105 @@
 let red_status = [];
+// console.log(typeof red_status);
 let blue_status = [];
 
+// cookies 官网:  https://github.com/js-cookie/js-cookie
 $(function () {
-    // alert("ssq.html js is ok !");
-    // $("#pagination>li").on("click", function () {
-    //     // alert("click li");
-    // });
 
-    html_load();
     check_num(red_status, 'red');
     check_num(blue_status, 'blue');
 
-    // 离开页面事件处理
-    // todo: 离开页面事件没作用
-    $(window).unload(function () {
-        // Cookies.set("red", red_status);
-        // Cookies.set("blue", blue_status);
-        // window.sessionStorage.setItem("red", red_status);
-        window.sessionStorage.red = red_status;
-        window.sessionStorage.blue = blue_status;
-    });
-
 });
 
+// 加载页面事件处理数据
+$(window).on("load", function () {
+    let cook = Cookies.getJSON("num_cookies");
+    // alert(JSON.parse(cook))
+    // console.log(typeof cook);
+    // 第一次加载 cook 是无状态的,直接返回,下一次正常执行
+    if (cook === undefined) {
+        return
+    }
+
+    red_status = cook.red;
+    blue_status = cook.blue;
+
+    // 判断 red_status blue_status 状态 决定是否重置
+    // 还原选择的状态
+    if (red_status === undefined) {
+        red_status = []
+    }
+    else {
+        $("input[name='red']").each(function () {
+            for (let i in red_status) {
+                if ($(this).val() === red_status[i]) {
+                    $(this).prop("checked", true)
+                }
+            }
+        })
+    }
+
+    if (blue_status === undefined) {
+        blue_status = []
+    } else {
+        $("input[name='blue']").each(function () {
+            for (let i in blue_status) {
+                if ($(this).val() === blue_status[i]) {
+                    $(this).prop("checked", true)
+                }
+            }
+        })
+    }
+
+    // console.log(red_status);
+    // console.log(blue_status);
+});
+
+// 离开页面事件处理
+$(window).on("beforeunload", function () {
+    // console.log("beforeunload ...");
+    // console.log(red_status);
+    // console.log(blue_status);
+
+    // 直接使用json 对象, 不用转换对象类型
+    let num_cookies = {"red": red_status, "blue": blue_status};
+    // Cookies.set("num_cookies", num_cookies, {expires: 1});
+    // Cookies.set("num_cookies", num_cookies, {expires: 2, domain: "127.0.0.1", path: '/'});
+    Cookies.set("num_cookies", num_cookies, {expires: 2, domain: "", path: '/'});
+
+    // window.sessionStorage.setItem("red", red_status);
+    // window.sessionStorage.red = red_status;
+    // window.sessionStorage.blue = blue_status;
+    // return ' ';
+});
+
+// //数组转json串
+// var arr = [1,2,3, { a : 1 } ];
+// JSON.stringify( arr );
+//
+// //json字符串转数组
+// var jsonStr = '[1,2,3,{"a":1}]';
+// JSON.parse( jsonStr );
+//
+// // json字符串转化成json对象
+// // jquery的方法
+// var jsonObj = $.parseJSON(jsonStr)
+// //js 的方法
+// var jsonObj =  JSON.parse(jsonStr)
+// json对象转化成json字符串
+// //js方法
+// var jsonStr1 = JSON.stringify(jsonObj)
+
+
 // 进入页面事件处理
-function html_load() {
-    // 读取cookie 加载数据
-    // red_status = Cookies.get("red");
-    // blue_status = Cookies.get("blue");
-    red_status = window.sessionStorage.getItem("red");
-    blue_status = window.sessionStorage.getItem("blue");
-    alert(red_status);
-    alert(blue_status);
-}
+// function html_load() {
+//     // 读取cookie 加载数据
+//     // red_status = Cookies.get("red");
+//     // blue_status = Cookies.get("blue");
+//     red_status = window.sessionStorage.getItem("red");
+//     blue_status = window.sessionStorage.getItem("blue");
+//     alert(red_status);
+//     alert(blue_status);
+// }
 
 
 // checkbox 状态设置
@@ -57,6 +124,7 @@ function check_num(check_status, who) {
     });
 }
 
+// 给数组添加一个 remove 方法
 Array.prototype.remove = function (val) {
     if (this.length <= 0 || this === undefined) {
         return false
@@ -66,6 +134,16 @@ Array.prototype.remove = function (val) {
         this.splice(this.indexOf(val), 1)
     }
 };
+
+function my_submit() {
+    // 判断 数组长度是不是符合标准
+    if (red_status.length >= 6 && blue_status.length >= 1) {
+        return true
+    } else {
+        alert("数据长度出错! 请重新选择后提交...");
+        return false
+    }
+}
 
 /*
 // 分页插件： http://www.php.cn/js-tutorial-348268.html

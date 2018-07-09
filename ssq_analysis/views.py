@@ -7,8 +7,9 @@ from .models import SsqInfo, SsqNum
 
 # Create your views here.
 lt10 = ["01", "02", "03", "04", "05", "06", "07", "08", "09"]
-red = [str(i) for i in range(10, 34)]
-blue = [str(i) for i in range(10, 17)]
+gt10 = [str(i) for i in range(10, 34)]
+head = lt10 + gt10
+# blue = [str(i) for i in range(10, 17)]
 
 # 初始化 设置全局的 ssq_info 避免每次调用ssq 需要查询数据库 调用 update 后要更新
 # ssq_ info 包括了数据库的全部内容
@@ -108,7 +109,7 @@ def update(request):
             # print(ssq_info)
             # 更新红球计数
             ind = 1
-            for x in (lt10 + red):
+            for x in head:
                 if x in lottery[0:6]:
                     dic2["red" + x] = 0
                 else:
@@ -117,7 +118,8 @@ def update(request):
 
             # 更新蓝球计数
             ind = 1
-            for x in (lt10 + blue):
+
+            for x in head[:16]:
                 if x == lottery[6]:
                     dic2["blue" + x] = 0
                 else:
@@ -154,7 +156,10 @@ def update(request):
 def ssq(request, model, page):
     # time.sleep(2)
     data = dict()
-    data["head"] = []
+    data["head"] = head
+    # 设置一个标志位 来分辨 red (1) 或 blue (2)
+    data["mark"] = 1
+    # data["head"] = []
     data["page_info"] = {"show_page": show_page(page), "current_page": page}
     # data["page_info"] = [show_page(page), page]
     # print(data["page_info"])
@@ -176,7 +181,7 @@ def ssq(request, model, page):
     # data["records"] = [("18001", 1, 2, 3, 6, 9), ("18002", 0, 3, 0), ("18003", 11, 3, 0)]
     # tempinfo = []
     if "blue" == model:
-        data["head"] = lt10 + blue
+        data["mark"] = 2
         for i in info:
             # print(type(i[0]))
             # 注意这个元组的坑 int TypeError: 'int' object is not iterable
@@ -184,7 +189,7 @@ def ssq(request, model, page):
             data["records"].append(t)
 
     elif "red" == model:
-        data["head"] = lt10 + red
+        data["mark"] = 1
         for p in info:
             # print(type(p[0]))
             t2 = (p[0],) + p[1:34]
@@ -206,15 +211,15 @@ def ssq(request, model, page):
 def composite_data(request):
     data = dict(request.POST)
     # data = request.REQUEST["red"]
-    print(data)
+    # print(data)
     # red_t = getattr(data, "red", None)
     # blue_t = getattr(data, "blue", None)
     red_t = data.get("red", None)
     blue_t = data.get("blue", None)
-    print(red_t)
-    print(blue_t)
-    return HttpResponse(None)
-    pass
+    # print(red_t)
+    # print(blue_t)
+    # return HttpResponse(None)
+    return render(request, "comp_data.html", context=data)
 
 
 def search(request):
