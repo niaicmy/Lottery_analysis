@@ -26,5 +26,5 @@ urlpatterns = [
     # path(r'ssq/<str:model>/', ssq_analysis.views.ssq, name="ssq"),
     path(r'ssq/<str:model>/<int:page>/', ssq_analysis.views.ssq, name="ssq"),
     path(r'', ssq_analysis.views.search, name="search"),
-    path(r'composite_data/', ssq_analysis.views.composite_data, name="composite_data"),
+    path(r'result/', ssq_analysis.views.composite_data, name="result"),
 ]

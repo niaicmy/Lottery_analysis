@@ -1,5 +1,6 @@
 from django.db import models
 
+
 # Create your models here.
 # 注意：Django 1.7 及以上的版本需要连续执行以下命令
 # python manage.py makemigrations
@@ -7,10 +8,11 @@ from django.db import models
 
 
 class SsqInfo(models.Model):
-    # 开奖期数
+    # 开奖期数 primary_key
     number = models.PositiveIntegerField(primary_key=True)
-    # 一个SsqNum记录 对应一个SsqInfo记录
-    # ssq_num = models.OneToOneField("SsqNum", on_delete=models.CASCADE, to_field="number")
+
+    # 一个SsqOrig记录 对应一个SsqInfo记录
+    # ssq_num = models.OneToOneField("SsqOrig", on_delete=models.CASCADE, to_field="number")
 
     red01 = models.PositiveIntegerField()
     red02 = models.PositiveIntegerField()
@@ -65,10 +67,12 @@ class SsqInfo(models.Model):
 
     class Meta:
         # db_table = "ssq_info"
+        db_table = "ssq_info"
         ordering = ["-number"]
 
 
-class SsqNum(models.Model):
+# 原始数据类
+class SsqOrig(models.Model):
     number = models.PositiveIntegerField(primary_key=True)
 
     red1 = models.CharField(max_length=2)
@@ -78,10 +82,25 @@ class SsqNum(models.Model):
     red5 = models.CharField(max_length=2)
     red6 = models.CharField(max_length=2)
     blue = models.CharField(max_length=2)
+
+    # parity 奇偶比
+    mparity = models.CharField(max_length=4)
+    # totality 和值
+    mtotal = models.CharField(max_length=4)
     # ssqinfo = models.ForeignKey("SsqInfo", on_delete=models.CASCADE)
-    # 一个SsqNum记录 对应一个SsqInfo记录
+    # 一个SsqOrig记录 对应一个SsqInfo记录
     # ssqinfo = models. OneToOneField("SsqInfo", on_delete=models.CASCADE)
 
     class Meta:
         # db_table = "ssq_num"
+        db_table = "ssq_orig"
         ordering = ["-number"]
+
+
+class Ssqtest(models.Model):
+    number = models.PositiveIntegerField(primary_key=True)
+
+    red1 = models.CharField(max_length=2)
+    red2 = models.CharField(max_length=2)
+    red3 = models.CharField(max_length=2)
+    red4 = models.CharField(max_length=2)

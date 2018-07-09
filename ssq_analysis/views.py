@@ -2,7 +2,7 @@ from django.shortcuts import render, HttpResponse, HttpResponseRedirect
 from django.contrib import messages
 from django.urls import reverse
 from data_collection.SpiderMain import parser
-from .models import SsqInfo, SsqNum
+from .models import SsqInfo, SsqOrig
 # import time
 
 # Create your views here.
@@ -20,7 +20,7 @@ ssq_info_all = SsqInfo.objects.all().values_list()
 # print("ssq_info_all is :{}".format(ssq_info_all))
 
 # 初始化 设置全局的 ssq_num 避免每次调用ssq 需要查询数据库 调用 update 后要更新
-ssq_num_all = SsqNum.objects.all().values_list()
+ssq_orig_all = SsqOrig.objects.all().values_list()
 # QuerySet [(17001, '09', '11', '14', '20', '25', '26', '15'), (17002, '15', '19', '23', '24', '25', '32', '03'),....]
 # print("ssq_num_all is :{}".format(ssq_num_all))
 # print("ssq_num_last is :{}".format(ssq_num_all[len(ssq_num_all)-1]))
@@ -66,16 +66,16 @@ def index(request):
 
 
 def update(request):
-    global ssq_num_all, ssq_info_all, page_total
+    global ssq_orig_all, ssq_info_all, page_total
     # 17155 -- 18001
     message = "Update fail !"
     # 最先更新 proxy
     parser("proxy", 1)
     # ssq_num 代表开奖期数
     # ssq_num = ssq_num_all[len(ssq_num_all) - 1][0]
-    ssq_num = ssq_num_all[0][0]
+    ssq_num = ssq_orig_all[0][0]
     # print(ssq_num)
-    # ssq_num = SsqNum.objects.values("number").last()
+    # ssq_num = SsqOrig.objects.values("number").last()
     # print(ssq_num)
     # count 是计算 lottery 失败次数
     count = 0
@@ -96,10 +96,11 @@ def update(request):
         # ==========解析数据内容============
         if lottery:
             # print("data coming ...")
-            # SsqNum 数据表的更新
+            # SsqOrig 数据表的更新
             dic = {'number': ssq_num, 'red1': lottery[0], 'red2': lottery[1], 'red3': lottery[2], 'red4': lottery[3],
                    'red5': lottery[4], 'red6': lottery[5], 'blue': lottery[6]}
-            SsqNum.objects.create(**dic)
+
+            SsqOrig.objects.create(**dic)
             # =================================================
             # SsqInfo 数据表的更新
             # 构造一个dic2 存放 SsqInfo 一行的数据
@@ -146,7 +147,7 @@ def update(request):
     # 最后使用最新数据
     # global ssq_num_all, ssq_info_all, page_total
     ssq_info_all = SsqInfo.objects.all().values_list()
-    ssq_num_all = SsqNum.objects.all().values_list()
+    ssq_orig_all = SsqOrig.objects.all().values_list()
     page_total = get_page_total()
 
     return HttpResponseRedirect(reverse("ssq", args=["red", 1]))
@@ -198,7 +199,7 @@ def ssq(request, model, page):
     # print(tempinfo)
     # data["records"] = tempinfo
     # =======================以下是显示原始数据======================================
-    # sp = SsqNum.objects.all().values_list()
+    # sp = SsqOrig.objects.all().values_list()
     # print(sp)
     # print(data)
     return render(request, "ssq.html", context=data)
@@ -216,10 +217,10 @@ def composite_data(request):
     # blue_t = getattr(data, "blue", None)
     red_t = data.get("red", None)
     blue_t = data.get("blue", None)
-    # print(red_t)
-    # print(blue_t)
+    print(red_t)
+    print(blue_t)
     # return HttpResponse(None)
-    return render(request, "comp_data.html", context=data)
+    return render(request, "compdata.html", context=data)
 
 
 def search(request):
