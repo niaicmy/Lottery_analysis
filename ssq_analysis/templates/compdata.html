@@ -19,18 +19,26 @@
             </tr>
             </thead>
             <tbody>
-            {% for group in records %}
+            {% if info %}
                 <tr>
-                    <td> {{ forloop.counter }}</td>
-                    {% for p in group %}
-                        {% if p < 10 %}
-                            <td>0{{ p }}</td>
-                        {% else %}
-                            <td>{{ p }}</td>
-                        {% endif %}
-                    {% endfor %}
+                    <td colspan="10">
+                        <p ><h4 class="text-danger text-center">{{ info }}</h4></p>
+                    </td>
                 </tr>
-            {% endfor %}
+            {% else %}
+                {% for group in records %}
+                    <tr>
+                        <td> {{ forloop.counter }}</td>
+                        {% for p in group %}
+                            {% if p < 10 %}
+                                <td>0{{ p }}</td>
+                            {% else %}
+                                <td>{{ p }}</td>
+                            {% endif %}
+                        {% endfor %}
+                    </tr>
+                {% endfor %}
+            {% endif %}
             </tbody>
         </table>
     </div>

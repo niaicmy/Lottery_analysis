@@ -5,9 +5,9 @@
 
 
 # 只是挑选红球的组合
-def main_handle(red_list, blue_list, model=6):
+def main_handle(red_list, blue_list, sum_list, model=6):
     """
-    传入参数red_list blue_list是list  model 是int 代表红球个数
+    传入参数red_list blue_list sum_list是list  model 是int 代表红球个数
     返回值是个list
     函数作用是从一个列表选取 任意不重复的组合 并作为结果
     函数的默认值只解释一次 再次调用就会消除默认值
@@ -54,15 +54,21 @@ def main_handle(red_list, blue_list, model=6):
         m_odd = 0
         m_even = 0
         m_sum = 0
+
         for i in group:
             m_sum += i
             if i % 2 == 0:
                 m_even += 1
             else:
                 m_odd += 1
-        result_list.append(group + [str(m_odd) + ":" + str(m_even)] + [m_sum])
 
-    return result_list
+        if sum_list[0] <= m_sum <= sum_list[1]:
+            result_list.append(group + [str(m_odd) + ":" + str(m_even)] + [m_sum])
+
+    if result_list:
+        return result_list
+    else:
+        return None
 
 
 # # 构造输入红球、蓝球的所有组合
@@ -89,7 +95,6 @@ def main_handle(red_list, blue_list, model=6):
 
 
 if __name__ == "__main__":
-
     red_li = [1, 3, 5, 7, 9, 13, 16, 18]
     blue_li = [5, 11, 16]
     kind = 6

@@ -225,7 +225,7 @@ def ssq(request, model, page):
     # print(type(info))
     data["records"] = []
     # data["records"] = [("18001", 1, 2, 3, 6, 9), ("18002", 0, 3, 0), ("18003", 11, 3, 0)]
-    # tempinfo = []
+
     if "blue" == model:
         data["mark"] = 2
         for i in info:
@@ -245,8 +245,6 @@ def ssq(request, model, page):
         data["mark"] = 3
         data["records"] = orig
 
-    # print(tempinfo)
-    # data["records"] = tempinfo
     # =======================以下是显示原始数据======================================
     # sp = SsqOrig.objects.all().values_list()
     # print(sp)
@@ -258,24 +256,31 @@ def ssq(request, model, page):
     # })
 
 
-# todo: 显示最后的数据 要 转换字符串 数字
+# 显示最后的数据 要 转换字符串 数字
 def composite_data(request):
     data = dict(request.POST)
     # print(data)
 
     result = dict()
     result["head"] = head
+    result["info"] = ''
 
     # 取出提交的数据
     red_t = data.get("red", None)
     blue_t = data.get("blue", None)
-    s_sum = data.get("ssum", None)
-    m_sum = data.get("msum", None)
-
-    red_list = []
-    blue_list = []
     # print(red_t)
     # print(blue_t)
+    s_sum = int(data.get("ssum", None)[0])
+    m_sum = int(data.get("msum", None)[0])
+    # print(s_sum)
+    # print(m_sum)
+    red_list = []
+    blue_list = []
+
+    # 和值范围的表示 sum_list
+    sum_list = [s_sum] + [m_sum]
+    sum_list.sort()
+    # print(sum_list)
 
     for i in red_t:
         if i in lt10:
@@ -289,10 +294,13 @@ def composite_data(request):
         else:
             blue_list.append(int(i))
 
-    handled = main_handle(red_list, blue_list)
+    handled = main_handle(red_list, blue_list, sum_list)
     # print(handled)
 
-    result["records"] = handled
+    if handled:
+        result["records"] = handled
+    else:
+        result["info"] = "未匹配到合适的数据,请重新设置数据与和值范围 !"
 
     # return HttpResponse(None)
     return render(request, "compdata.html", context=result)
@@ -300,7 +308,6 @@ def composite_data(request):
 
 def search(request):
     return HttpResponse(None)
-
 
 # def page_not_found(request):
 #     return render(request, '404.html')
