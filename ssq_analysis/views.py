@@ -1,8 +1,11 @@
 from django.shortcuts import render, HttpResponse, HttpResponseRedirect
 from django.contrib import messages
+from django.http import Http404
 from django.urls import reverse
-from data_collection.SpiderMain import parser
+from data_handle.SpiderMain import parser
+from data_handle.MainHandle import main_handle
 from .models import SsqInfo, SsqOrig
+
 # import time
 
 # Create your views here.
@@ -10,6 +13,9 @@ lt10 = ["01", "02", "03", "04", "05", "06", "07", "08", "09"]
 gt10 = [str(i) for i in range(10, 34)]
 head = lt10 + gt10
 # blue = [str(i) for i in range(10, 17)]
+
+# app 所有的匹配模式
+models = ["red", "blue", "orig"]
 
 # 初始化 设置全局的 ssq_info 避免每次调用ssq 需要查询数据库 调用 update 后要更新
 # ssq_ info 包括了数据库的全部内容
@@ -29,6 +35,8 @@ ssq_orig_all = SsqOrig.objects.all().values_list()
 # 以下是分页机制 ================================================
 # page_limit : 每一页显示数据量
 page_limit = 15
+
+
 # page_limit = 2
 
 
@@ -46,6 +54,8 @@ def get_page_total():
 
 # 初始化 设置全局的 page_total
 page_total = get_page_total()
+
+
 # print(page_total)
 
 
@@ -89,25 +99,45 @@ def update(request):
         # +++++++++++
         # 测试用
         # print(ssq_num)
-        # if ssq_num == 17008:
-        #     break
+        if ssq_num == 17032:
+            break
         # +++++++++++++
 
         # ==========解析数据内容============
         if lottery:
             # print("data coming ...")
             # SsqOrig 数据表的更新
+            # 计算全部的 奇偶比  和值
+            m_odd = 0
+            m_even = 0
+            m_sum = 0
+            for i in lottery:
+                if i in lt10:
+                    m_sum += int(i[1])
+                    if int(i[1]) % 2 == 0:
+                        m_even += 1
+                    else:
+                        m_odd += 1
+                else:
+                    m_sum += int(i)
+                    if int(i) % 2 == 0:
+                        m_even += 1
+                    else:
+                        m_odd += 1
+
             dic = {'number': ssq_num, 'red1': lottery[0], 'red2': lottery[1], 'red3': lottery[2], 'red4': lottery[3],
-                   'red5': lottery[4], 'red6': lottery[5], 'blue': lottery[6]}
+                   'red5': lottery[4], 'red6': lottery[5], 'blue': lottery[6],
+                   'mparity': (str(m_odd) + ":" + str(m_even)), 'mtotal': str(m_sum)}
 
             SsqOrig.objects.create(**dic)
+
             # =================================================
             # SsqInfo 数据表的更新
             # 构造一个dic2 存放 SsqInfo 一行的数据
             dic2 = {"number": ssq_num}
             # 取出最新的SsqInfo
-            ssq_info_last = list(SsqInfo.objects.all().values_list().last())
-            # print(ssq_info)
+            ssq_info_last = list(SsqInfo.objects.all().values_list().first())
+            # print(ssq_info_last)
             # 更新红球计数
             ind = 1
             for x in head:
@@ -119,7 +149,6 @@ def update(request):
 
             # 更新蓝球计数
             ind = 1
-
             for x in head[:16]:
                 if x == lottery[6]:
                     dic2["blue" + x] = 0
@@ -156,7 +185,14 @@ def update(request):
 # 设置 model 来切换显示
 def ssq(request, model, page):
     # time.sleep(2)
+
+    if page > page_total[-1] or (model not in models):
+        # print("page full ...")
+        raise Http404("Page Index Out Of Range. !")
+
     data = dict()
+    orig = []
+    info = []
     data["head"] = head
     # 设置一个标志位 来分辨 red (1) 或 blue (2)
     data["mark"] = 1
@@ -172,10 +208,19 @@ def ssq(request, model, page):
     # blue 34-49 [34:50]
     # 24, 23, 15, 35, 4, 1, 2, 32, 33, 8, 51, 7, 11, 17, 0, 27)
     # page * page_limit 不能超过 ssq_info_all 的最大长度
-    if page * page_limit <= len(ssq_info_all):
-        info = list(ssq_info_all)[(page - 1) * page_limit:page * page_limit]
+    if "orig" == model:
+        if page * page_limit <= len(ssq_orig_all):
+            orig = list(ssq_orig_all)[(page - 1) * page_limit:page * page_limit]
+        else:
+            orig = list(ssq_orig_all)[(page - 1) * page_limit:len(ssq_info_all)]
+
+        # print(orig)
     else:
-        info = list(ssq_info_all)[(page - 1) * page_limit:len(ssq_info_all)]
+        if page * page_limit <= len(ssq_info_all):
+            info = list(ssq_info_all)[(page - 1) * page_limit:page * page_limit]
+        else:
+            info = list(ssq_info_all)[(page - 1) * page_limit:len(ssq_info_all)]
+
     # print(info)
     # print(type(info))
     data["records"] = []
@@ -196,6 +241,10 @@ def ssq(request, model, page):
             t2 = (p[0],) + p[1:34]
             data["records"].append(t2)
 
+    elif "orig" == model:
+        data["mark"] = 3
+        data["records"] = orig
+
     # print(tempinfo)
     # data["records"] = tempinfo
     # =======================以下是显示原始数据======================================
@@ -209,19 +258,57 @@ def ssq(request, model, page):
     # })
 
 
+# todo: 显示最后的数据 要 转换字符串 数字
 def composite_data(request):
     data = dict(request.POST)
-    # data = request.REQUEST["red"]
     # print(data)
-    # red_t = getattr(data, "red", None)
-    # blue_t = getattr(data, "blue", None)
+
+    result = dict()
+    result["head"] = head
+
+    # 取出提交的数据
     red_t = data.get("red", None)
     blue_t = data.get("blue", None)
-    print(red_t)
-    print(blue_t)
+    s_sum = data.get("ssum", None)
+    m_sum = data.get("msum", None)
+
+    red_list = []
+    blue_list = []
+    # print(red_t)
+    # print(blue_t)
+
+    for i in red_t:
+        if i in lt10:
+            red_list.append(int(i[1]))
+        else:
+            red_list.append(int(i))
+
+    for i in blue_t:
+        if i in lt10:
+            blue_list.append(int(i[1]))
+        else:
+            blue_list.append(int(i))
+
+    handled = main_handle(red_list, blue_list)
+    # print(handled)
+
+    result["records"] = handled
+
     # return HttpResponse(None)
-    return render(request, "compdata.html", context=data)
+    return render(request, "compdata.html", context=result)
 
 
 def search(request):
     return HttpResponse(None)
+
+
+# def page_not_found(request):
+#     return render(request, '404.html')
+#
+#
+# def page_error(request):
+#     return render(request, '500.html')
+#
+#
+# def permission_denied(request):
+#     return render(request, '403.html')

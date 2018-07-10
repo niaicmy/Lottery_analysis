@@ -2,5 +2,36 @@
 {% load staticfiles %}
 
 {% block right-body %}
-
+    <div class="col-md-10">
+        <table class="table table-bordered table-hover table-striped table-condensed">
+            <thead>
+            <tr>
+                <th>序号</th>
+                <th>红球</th>
+                <th>红球</th>
+                <th>红球</th>
+                <th>红球</th>
+                <th>红球</th>
+                <th>红球</th>
+                <th>蓝球</th>
+                <th>奇偶比</th>
+                <th>和值</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for group in records %}
+                <tr>
+                    <td> {{ forloop.counter }}</td>
+                    {% for p in group %}
+                        {% if p < 10 %}
+                            <td>0{{ p }}</td>
+                        {% else %}
+                            <td>{{ p }}</td>
+                        {% endif %}
+                    {% endfor %}
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
 {% endblock %}

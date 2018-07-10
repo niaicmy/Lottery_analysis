@@ -107,7 +107,7 @@ def parser(who, num):
     """
     base_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
     # print(base_dir)
-    abs_dir = base_dir + r"\data_collection\Httpconfig.json"
+    abs_dir = base_dir + r"\data_handle\Httpconfig.json"
     # print(abs_dir)
     config = openconfig(abs_dir)
     par = get_parser(config, who)

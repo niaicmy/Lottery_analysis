@@ -5,7 +5,8 @@ from django.db import models
 # 注意：Django 1.7 及以上的版本需要连续执行以下命令
 # python manage.py makemigrations
 # python manage.py migrate
-
+# 问题 https://blog.csdn.net/pipisorry/article/details/45727309
+# django.db.utils.ProgrammingError: (1146
 
 class SsqInfo(models.Model):
     # 开奖期数 primary_key
@@ -67,6 +68,7 @@ class SsqInfo(models.Model):
 
     class Meta:
         # db_table = "ssq_info"
+        # abstract = True
         db_table = "ssq_info"
         ordering = ["-number"]
 
@@ -93,14 +95,6 @@ class SsqOrig(models.Model):
 
     class Meta:
         # db_table = "ssq_num"
+        # abstract = True
         db_table = "ssq_orig"
         ordering = ["-number"]
-
-
-class Ssqtest(models.Model):
-    number = models.PositiveIntegerField(primary_key=True)
-
-    red1 = models.CharField(max_length=2)
-    red2 = models.CharField(max_length=2)
-    red3 = models.CharField(max_length=2)
-    red4 = models.CharField(max_length=2)

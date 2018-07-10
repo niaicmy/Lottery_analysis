@@ -2,11 +2,39 @@ let red_status = [];
 // console.log(typeof red_status);
 let blue_status = [];
 
+// 和值的范围
+let s_sum = 0;
+let m_sum = 0;
+
 // cookies 官网:  https://github.com/js-cookie/js-cookie
 $(function () {
 
     check_num(red_status, 'red');
     check_num(blue_status, 'blue');
+
+    $("input[name='ssum']").blur(function () {
+        // alert("ssum blur.")
+        s_sum = parseInt($(this).val());
+        if(s_sum<22 || s_sum >=199){
+            alert("输入值不在和值范围内.");
+            // $(this).focus()
+        }
+        // console.log("ssum blur.")
+        // console.log(typeof s_sum);
+        // console.log(s_sum)
+    });
+
+    $("input[name='msum']").blur(function () {
+        // alert("msum blur.")
+        m_sum = parseInt($(this).val());
+        if(m_sum<22 || m_sum >199){
+            alert("输入值不在和值范围内.");
+            // $(this).focus()
+        }
+        // console.log("msum blur.")
+        // console.log(typeof m_sum);
+        // console.log(m_sum)
+    });
 
 });
 
@@ -22,6 +50,9 @@ $(window).on("load", function () {
 
     red_status = cook.red;
     blue_status = cook.blue;
+
+    s_sum = cook.ssum;
+    m_sum = cook.msum;
 
     // 判断 red_status blue_status 状态 决定是否重置
     // 还原选择的状态
@@ -50,6 +81,20 @@ $(window).on("load", function () {
         })
     }
 
+    if (s_sum === undefined) {
+        s_sum = 0
+    }
+    else {
+        $("input[name='ssum']").val(s_sum)
+    }
+
+    if (m_sum === undefined) {
+        m_sum = 0
+    }
+    else {
+        $("input[name='msum']").val(m_sum)
+    }
+
     // console.log(red_status);
     // console.log(blue_status);
 });
@@ -61,7 +106,7 @@ $(window).on("beforeunload", function () {
     // console.log(blue_status);
 
     // 直接使用json 对象, 不用转换对象类型
-    let num_cookies = {"red": red_status, "blue": blue_status};
+    let num_cookies = {"red": red_status, "blue": blue_status, "ssum": s_sum, "msum": m_sum};
     // Cookies.set("num_cookies", num_cookies, {expires: 1});
     // Cookies.set("num_cookies", num_cookies, {expires: 2, domain: "127.0.0.1", path: '/'});
     Cookies.set("num_cookies", num_cookies, {expires: 2, domain: "", path: '/'});
@@ -137,10 +182,13 @@ Array.prototype.remove = function (val) {
 
 function my_submit() {
     // 判断 数组长度是不是符合标准
-    if (red_status.length >= 6 && blue_status.length >= 1) {
-        return true
-    } else {
+    if (red_status.length < 6 && blue_status.length < 1 ) {
         alert("数据长度出错! 请重新选择后提交...");
+        return false
+    }
+
+    if (s_sum < 22 && s_sum > 199 && m_sum < 22 && m_sum > 199 ) {
+        alert("和值输入错误 请重新输入后提交...");
         return false
     }
 }

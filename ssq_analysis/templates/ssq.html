@@ -14,7 +14,7 @@
                     </ul>
                     <ul class="list-group list-unstyled">
                         <li class="pull-left list-group-item col-md-6 text-center"><a
-                                href="{% url 'ssq' 'original' 1 %}">原始数据</a></li>
+                                href="{% url 'ssq' 'orig' 1 %}">原始数据</a></li>
                         <li class="pull-right list-group-item col-md-6 text-center"><a
                                 href="{% url 'update' %}">更新数据</a></li>
                     </ul>
@@ -54,11 +54,19 @@
                                     </div>
                                 {% endfor %}
                             </div>
-
-                            <div class="text-center">
-                            {#    <input type="submit" value="提交数据" class="form-control" onclick="my_submit()">#}
-                            {# 这里有个坑 下面的提交 需要 return my_submit  直接写 submit 不能正常工作的#}
-                                <input type="submit" value="提交数据" class="form-control" onclick="return my_submit()">
+                            <p>和值范围:</p>
+                            <div class="form-inline">
+                                <label style="width: 40%;"><input type="number" name="ssum" placeholder=">=22"
+                                                                  style="width: 100%;"></label>
+                                <span>~</span>
+                                <label style="width: 40%;"><input type="number" name="msum" placeholder="<=199"
+                                                                  style="width: 100%;"></label>
+                            </div>
+                            <div>
+                                {#    <input type="submit" value="提交数据" class="form-control" onclick="my_submit()">#}
+                                {# 这里有个坑 下面的提交 需要 return my_submit  直接写 submit 不能正常工作的#}
+                                <input type="submit" value="提交数据" class="form-control text-center"
+                                       onclick="return my_submit()">
                             </div>
                         </form>
                     </div>
@@ -74,15 +82,27 @@
                         <thead>
                         <tr>
                             <th>期数</th>
-                        {% if mark == 1 %}
-                            {% for i in head %}
-                                <th>{{ i }}</th>
-                            {% endfor %}
+                            {% if mark == 1 %}
+                                {% for i in head %}
+                                    <th>{{ i }}</th>
+                                {% endfor %}
+
                             {% elif mark == 2 %}
-                            {% for i in head|slice:"0:16" %}
-                                <th>{{ i }}</th>
-                            {% endfor %}
-                        {% endif %}
+                                {% for i in head|slice:"0:16" %}
+                                    <th>{{ i }}</th>
+                                {% endfor %}
+
+                            {% elif mark == 3 %}
+                                <th>红球</th>
+                                <th>红球</th>
+                                <th>红球</th>
+                                <th>红球</th>
+                                <th>红球</th>
+                                <th>红球</th>
+                                <th>蓝球</th>
+                                <th>奇偶比</th>
+                                <th>和值</th>
+                            {% endif %}
 
                         </tr>
                         </thead>
@@ -115,7 +135,7 @@
                     {#  TODO: 翻页的代码  Ajax #}
                     <div class="col-md-5 col-md-offset-4">
                         <ul class="pagination" id="pagination">
-                            {% if head|length > 20 %}
+                            {% if mark == 1 %}
 
                                 {% if page_info.current_page == 1 %}
                                     <li class="disabled"><a href="javascript:void(0);">&laquo; Prev</a>
@@ -162,7 +182,7 @@
 
                                 {% endif %}
 
-                            {% else %}
+                            {% elif mark == 2 %}
 
                             {% if page_info.current_page == 1 %}
                                 <li class="disabled"><a href="javascript:void(0);">&laquo; Prev</a>
@@ -209,6 +229,51 @@
 
                             {% endif %}
 
+                            {% elif mark == 3 %}
+                            {% if page_info.current_page == 1 %}
+                                <li class="disabled"><a href="javascript:void(0);">&laquo; Prev</a>
+
+                                    {% for page in page_info.show_page %}
+                                        {% if page == page_info.current_page %}
+                                            <li class="active"><a
+                                                    href="{% url 'ssq' 'orig' page %}"> {{ page }} </a>
+                                            </li>
+                                        {% else %}
+                                            <li><a href="{% url 'ssq' 'orig' page %}"> {{ page }} </a></li>
+                                        {% endif %}
+                                    {% endfor %}
+
+                                {% if page_info.show_page|length_is:1 %}
+                                    <li class="disabled"><a href="javascript:void (0);">Next &raquo;</a>
+                                    </li>
+                                {% else %}
+                                    <li><a href="{% url 'ssq' 'orig' page_info.current_page|add:1 %}">Next
+                                        &raquo;</a>
+                                    </li>
+                                {% endif %}
+                            {% elif page_info.current_page > 1 and page_info.current_page <= page_info.show_page|last %}
+
+                                <li><a href="{% url 'ssq' 'orig' page_info.current_page|add:-1 %}">&laquo; Prev</a>
+
+                                    {% for page in page_info.show_page %}
+                                        {% if page == page_info.current_page %}
+                                            <li class="active"><a
+                                                    href="{% url 'ssq' 'orig' page %}"> {{ page }} </a>
+                                            </li>
+                                        {% else %}
+                                            <li><a href="{% url 'ssq' 'orig' page %}"> {{ page }} </a></li>
+                                        {% endif %}
+                                    {% endfor %}
+
+                                {% if page_info.current_page == page_info.show_page|last %}
+                                    <li class="disabled"><a href="javascript:void(0);">Next &raquo;</a>
+                                    </li>
+                                {% else %}
+                                    <li>
+                                    <a href="{% url 'ssq' 'orig' page_info.current_page|add:1 %}">Next &raquo;</a>
+                                {% endif %}
+
+                            {% endif %}
                             {% endif %}
                         </ul>
                     </div>

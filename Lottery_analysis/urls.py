@@ -28,3 +28,8 @@ urlpatterns = [
     path(r'', ssq_analysis.views.search, name="search"),
     path(r'result/', ssq_analysis.views.composite_data, name="result"),
 ]
+
+
+# handler403 = ssq_analysis.views.permission_denied
+# handler404 = ssq_analysis.views.page_not_found
+# handler500 = ssq_analysis.views.page_error
