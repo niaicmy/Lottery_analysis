@@ -5,17 +5,17 @@
     <div class="container-fluid">
         <div class="row">
             {% block left-body %}
-                <div class="col-md-2">
+                <div class="col-md-2 col-lg-2">
                     <ul class="list-group list-unstyled">
-                        <li class="pull-left list-group-item col-md-6 text-center"><a href="{% url 'ssq' 'red' 1 %}">红&thinsp;球</a>
+                        <li class="pull-left list-group-item col-md-6 col-lg-6 text-center"><a href="{% url 'ssq' 'red' 1 %}">红&thinsp;球</a>
                         </li>
-                        <li class="pull-right list-group-item col-md-6 text-center"><a href="{% url 'ssq' 'blue' 1 %}">蓝&thinsp;球</a>
+                        <li class="pull-right list-group-item col-md-6 col-lg-6 text-center"><a href="{% url 'ssq' 'blue' 1 %}">蓝&thinsp;球</a>
                         </li>
                     </ul>
                     <ul class="list-group list-unstyled">
-                        <li class="pull-left list-group-item col-md-6 text-center"><a
+                        <li class="pull-left list-group-item col-md-6 col-lg-6 text-center"><a
                                 href="{% url 'ssq' 'orig' 1 %}">原始数据</a></li>
-                        <li class="pull-right list-group-item col-md-6 text-center"><a
+                        <li class="pull-right list-group-item col-md-6 col-lg-6 text-center"><a
                                 href="{% url 'update' %}">更新数据</a></li>
                     </ul>
                     <div class="clearfix">
@@ -77,7 +77,7 @@
             {% endblock %}
 
             {% block right-body %}
-                <div class="col-md-10">
+                <div class="col-md-10 col-lg-10">
                     <table class="table table-bordered table-hover table-striped table-condensed">
                         <thead>
                         <tr>
@@ -133,7 +133,7 @@
                         {#                        </tfoot>#}
                     </table>
                     {#  TODO: 翻页的代码  Ajax #}
-                    <div class="col-md-5 col-md-offset-4">
+                    <div class="col-md-5 col-md-offset-4 col-lg-5 col-lg-offset-4">
                         <ul class="pagination" id="pagination">
                             {% if mark == 1 %}
 

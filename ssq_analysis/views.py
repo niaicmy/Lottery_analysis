@@ -99,8 +99,8 @@ def update(request):
         # +++++++++++
         # 测试用
         # print(ssq_num)
-        if ssq_num == 17032:
-            break
+        # if ssq_num == 17032:
+        #     break
         # +++++++++++++
 
         # ==========解析数据内容============

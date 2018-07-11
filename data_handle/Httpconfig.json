@@ -65,7 +65,12 @@
     },
     "proxy": {
       "url": "https://www.kuaidaili.com/free/inha/{0}/",
-      "path": "//div[@id=\"list\"]/table/tbody/tr[{0}]/td/text()"
+      "path": "//div[@id=\"list\"]/table/tbody/tr[{0}]//text()"
+    },
+    "proxy2": {
+      "url": "http://31f.cn/https-proxy/",
+      "path": "//table[{0}]/tbody/tr[{1}]/td/text()",
+      "path2": "//div[@id=\"list\"]/table/tbody/tr[{0}]//text()"
     }
   }
 }

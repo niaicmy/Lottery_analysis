@@ -4,6 +4,10 @@
 """
 
 
+def take_sum(elem):
+    return elem[-1]
+
+
 # 只是挑选红球的组合
 def main_handle(red_list, blue_list, sum_list, model=6):
     """
@@ -65,10 +69,12 @@ def main_handle(red_list, blue_list, sum_list, model=6):
         if sum_list[0] <= m_sum <= sum_list[1]:
             result_list.append(group + [str(m_odd) + ":" + str(m_even)] + [m_sum])
 
-    if result_list:
-        return result_list
-    else:
+    if not result_list:
         return None
+
+    # 按和值大小排序
+    result_list.sort(key=take_sum)
+    return result_list
 
 
 # # 构造输入红球、蓝球的所有组合
@@ -97,8 +103,9 @@ def main_handle(red_list, blue_list, sum_list, model=6):
 if __name__ == "__main__":
     red_li = [1, 3, 5, 7, 9, 13, 16, 18]
     blue_li = [5, 11, 16]
+    sum_li = [30, 120]
     kind = 6
-    result = main_handle(red_li, blue_li, kind)
+    result = main_handle(red_li, blue_li, sum_li, kind)
 
     print(result)
 

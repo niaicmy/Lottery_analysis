@@ -22,7 +22,7 @@
             {% if info %}
                 <tr>
                     <td colspan="10">
-                        <p ><h4 class="text-danger text-center">{{ info }}</h4></p>
+                        <h4 class="text-danger text-center">{{ info }}</h4>
                     </td>
                 </tr>
             {% else %}
@@ -32,6 +32,8 @@
                         {% for p in group %}
                             {% if p < 10 %}
                                 <td>0{{ p }}</td>
+                            {% elif p > 90 and p < 130 %}
+                                <td class="success">{{ p }}</td>
                             {% else %}
                                 <td>{{ p }}</td>
                             {% endif %}

@@ -111,6 +111,7 @@ def parser(who, num):
     # print(abs_dir)
     config = openconfig(abs_dir)
     par = get_parser(config, who)
+    # print(par)
 
     if "lottery" == who:
         # 表示取的期数
@@ -130,13 +131,13 @@ def parser(who, num):
                 if '{Result2}' == li[0]:
                     # print("ssq No data ! or The data is the latest !")
                     # 可以这样 检查2-4 次 返回 None 的结果来判断 期数是不是最新 当然可以同步数据库 只检测最新期数
-                    req.close()
+                    # req.close()
                     return None
                 else:
-                    req.close()
+                    # req.close()
                     return li
             elif req.status_code == 404:    # 返回404
-                req.close()
+                # req.close()
                 return None
 
     elif "proxy" == who:
@@ -158,7 +159,9 @@ def parser(who, num):
                 # 取网页数据
                 for i in range(1, 16):
                     pro = html.xpath(par["path"].format(i))
+                    pro = pro[1::2]
                     # print(pro)
+                    # print(pro[5][0])
                     if int(pro[5][0]) <= 3:
                         tem.append(pro)
                     if len(tem) >= 5:
@@ -177,8 +180,44 @@ def parser(who, num):
 
             openconfig(abs_dir, config)
 
+    # elif "proxy2" == who:
+    #     print("proxy2")
+    #     try:
+    #         req = requests.get(par["url"], timeout=10, headers=get_header(config),
+    #                            proxies=get_proxy(config))
+    #     except requests.exceptions.Timeout:
+    #         return None
+    #     except requests.exceptions.ConnectionError:
+    #         return None
+    #     else:
+    #         if req.ok:
+    #             tem = list()
+    #             html = etree.HTML(req.text)
+    #
+    #             for i in range(2, 16):
+    #                 pro = html.xpath(par["path"].format(num, i))
+    #                 print(pro)
+    #                 if int(pro[5][0]) <= 3:
+    #                     tem.append(pro)
+    #                 if len(tem) >= 5:
+    #                     break
+    #             # 更新 proxy
+    #             if tem[0]:
+    #                 # print(tem)
+    #                 count = 0
+    #                 for p in tem:
+    #                     config["proxy"][count]["host"] = p[0]
+    #                     config["proxy"][count]["port"] = p[1]
+    #                     config["proxy"][count]["mold"] = p[3]
+    #                     count += 1
+    #                     # config["proxy"][count]["user"] = p[0]
+    #                     # config["proxy"][count]["pwd"] = p[0]
+    #
+    #         openconfig(abs_dir, config)
+
 
 if __name__ == '__main__':
     print(parser("lottery", 18001))
-    print(parser("proxy", 1))
+    # print(parser("proxy", 1))
+    # print(parser("proxy2", 1))
     # 打开配置文件
