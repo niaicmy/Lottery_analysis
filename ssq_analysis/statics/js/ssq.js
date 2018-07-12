@@ -9,13 +9,14 @@ let m_sum = 0;
 // cookies 官网:  https://github.com/js-cookie/js-cookie
 $(function () {
 
+    my_loda();
     check_num(red_status, 'red');
     check_num(blue_status, 'blue');
 
     $("input[name='ssum']").blur(function () {
         // alert("ssum blur.")
         s_sum = parseInt($(this).val());
-        if(s_sum<22 || s_sum >=199){
+        if (s_sum < 22 || s_sum >= 199) {
             alert("输入值不在和值范围内.");
             // $(this).focus()
         }
@@ -27,7 +28,7 @@ $(function () {
     $("input[name='msum']").blur(function () {
         // alert("msum blur.")
         m_sum = parseInt($(this).val());
-        if(m_sum<22 || m_sum >199){
+        if (m_sum < 22 || m_sum > 199) {
             alert("输入值不在和值范围内.");
             // $(this).focus()
         }
@@ -39,7 +40,69 @@ $(function () {
 });
 
 // 加载页面事件处理数据
-$(window).on("load", function () {
+// $(window).on("load", function () {
+//     let cook = Cookies.getJSON("num_cookies");
+//     // alert(JSON.parse(cook))
+//     // console.log(typeof cook);
+//     // 第一次加载 cook 是无状态的,直接返回,下一次正常执行
+//     if (cook === undefined) {
+//         return
+//     }
+//
+//     red_status = cook.red;
+//     blue_status = cook.blue;
+//     console.log("red_status is" + red_status);
+//     console.log("blue_status is" + blue_status);
+//
+//     s_sum = cook.ssum;
+//     m_sum = cook.msum;
+//
+//     // 判断 red_status blue_status 状态 决定是否重置
+//     // 还原选择的状态
+//     if (red_status === undefined) {
+//         red_status = []
+//     }
+//     else {
+//         $("input[name='red']").each(function () {
+//             for (let i in red_status) {
+//                 if ($(this).val() === red_status[i]) {
+//                     $(this).prop("checked", true)
+//                 }
+//             }
+//         })
+//     }
+//
+//     if (blue_status === undefined) {
+//         blue_status = []
+//     } else {
+//         $("input[name='blue']").each(function () {
+//             for (let i in blue_status) {
+//                 if ($(this).val() === blue_status[i]) {
+//                     $(this).prop("checked", true)
+//                 }
+//             }
+//         })
+//     }
+//
+//     if (s_sum === undefined) {
+//         s_sum = 0
+//     }
+//     else {
+//         $("input[name='ssum']").val(s_sum)
+//     }
+//
+//     if (m_sum === undefined) {
+//         m_sum = 0
+//     }
+//     else {
+//         $("input[name='msum']").val(m_sum)
+//     }
+//
+//     // console.log(red_status);
+//     // console.log(blue_status);
+// });
+
+function my_loda() {
     let cook = Cookies.getJSON("num_cookies");
     // alert(JSON.parse(cook))
     // console.log(typeof cook);
@@ -50,6 +113,8 @@ $(window).on("load", function () {
 
     red_status = cook.red;
     blue_status = cook.blue;
+    // console.log("red_status is " + red_status);
+    // console.log("blue_status is " + blue_status);
 
     s_sum = cook.ssum;
     m_sum = cook.msum;
@@ -97,7 +162,8 @@ $(window).on("load", function () {
 
     // console.log(red_status);
     // console.log(blue_status);
-});
+}
+
 
 // 离开页面事件处理
 $(window).on("beforeunload", function () {
@@ -149,7 +215,8 @@ $(window).on("beforeunload", function () {
 
 // checkbox 状态设置
 function check_num(check_status, who) {
-    $("input[name= who]".replace("who", who)).on("change", function () {
+    // console.log(check_status);
+    $("input[name=who]".replace("who", who)).on("change", function () {
         // alert($(this).val());
         // alert(check_status);
         // alert($.inArray($(this).val(), check_status));
@@ -164,6 +231,8 @@ function check_num(check_status, who) {
             // alert("in remove");
             // alert(check_status)
         }
+
+        // console.log(check_status)
         // alert(who +":" + check_status)
         // alert("checkbox click. ")
     });
@@ -182,12 +251,14 @@ Array.prototype.remove = function (val) {
 
 function my_submit() {
     // 判断 数组长度是不是符合标准
-    if (red_status.length < 6 && blue_status.length < 1 ) {
+    // alert(red_status);
+    // alert(blue_status);
+    if (red_status.length < 6 && blue_status.length < 1) {
         alert("数据长度出错! 请重新选择后提交...");
         return false
     }
 
-    if (s_sum < 22 && s_sum > 199 && m_sum < 22 && m_sum > 199 ) {
+    if (s_sum < 22 || s_sum > 199 || m_sum < 22 || m_sum > 199) {
         alert("和值输入错误 请重新输入后提交...");
         return false
     }
