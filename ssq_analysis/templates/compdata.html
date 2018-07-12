@@ -28,12 +28,19 @@
             {% else %}
                 {% for group in records %}
                     <tr>
-                        <td> {{ forloop.counter }}</td>
+                        {% if forloop.counter < 10 %}
+                            <td>00{{ forloop.counter }}</td>
+                        {% elif 10 <= forloop.counter and forloop.counter < 100 %}
+                            <td>0{{ forloop.counter }}</td>
+                        {% else %}
+                            <td>{{ forloop.counter }}</td>
+                        {% endif %}
+
                         {% for p in group %}
                             {% if p < 10 %}
                                 <td>0{{ p }}</td>
-                            {% elif p > 90 and p < 130 %}
-                                <td class="success">{{ p }}</td>
+                            {% elif 85 < p and p < 125 %}
+                                <td class="danger">{{ p }}</td>
                             {% else %}
                                 <td>{{ p }}</td>
                             {% endif %}
