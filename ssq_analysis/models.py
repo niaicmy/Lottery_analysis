@@ -98,3 +98,65 @@ class SsqOrig(models.Model):
         # abstract = True
         db_table = "ssq_orig"
         ordering = ["-number"]
+
+
+# 数据活跃度  vitality 存储 红球, 篮球, 奇偶比, 和值  还是动态分析 存储不方便
+# class SsqVital(models.Model):
+#     # 开奖期数 primary_key
+#     number = models.PositiveIntegerField(primary_key=True)
+#
+#     red01 = models.FloatField()
+#     red02 = models.FloatField()
+#     red03 = models.FloatField()
+#     red04 = models.FloatField()
+#     red05 = models.FloatField()
+#     red06 = models.FloatField()
+#     red07 = models.FloatField()
+#     red08 = models.FloatField()
+#     red09 = models.FloatField()
+#     red10 = models.FloatField()
+#     red11 = models.FloatField()
+#     red12 = models.FloatField()
+#     red13 = models.FloatField()
+#     red14 = models.FloatField()
+#     red15 = models.FloatField()
+#     red16 = models.FloatField()
+#     red17 = models.FloatField()
+#     red18 = models.FloatField()
+#     red19 = models.FloatField()
+#     red20 = models.FloatField()
+#     red21 = models.FloatField()
+#     red22 = models.FloatField()
+#     red23 = models.FloatField()
+#     red24 = models.FloatField()
+#     red25 = models.FloatField()
+#     red26 = models.FloatField()
+#     red27 = models.FloatField()
+#     red28 = models.FloatField()
+#     red29 = models.FloatField()
+#     red30 = models.FloatField()
+#     red31 = models.FloatField()
+#     red32 = models.FloatField()
+#     red33 = models.FloatField()
+#
+#     blue01 = models.FloatField()
+#     blue02 = models.FloatField()
+#     blue03 = models.FloatField()
+#     blue04 = models.FloatField()
+#     blue05 = models.FloatField()
+#     blue06 = models.FloatField()
+#     blue07 = models.FloatField()
+#     blue08 = models.FloatField()
+#     blue09 = models.FloatField()
+#     blue10 = models.FloatField()
+#     blue11 = models.FloatField()
+#     blue12 = models.FloatField()
+#     blue13 = models.FloatField()
+#     blue14 = models.FloatField()
+#     blue15 = models.FloatField()
+#     blue16 = models.FloatField()
+#
+#     class Meta:
+#         abstract = True
+#         db_table = "ssq_vital"
+#         ordering = ["-number"]

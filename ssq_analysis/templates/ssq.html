@@ -92,9 +92,11 @@
 
             {% block right-body %}
                 <div class="col-md-10 col-lg-10">
-                    <table class="table table-bordered table-hover table-striped table-condensed">
-                        <thead>
-                        <tr>
+                    {#  TODO: 怎么固定表格的表头呢? #}
+                    <table class="table table-bordered table-hover table-striped table-condensed"
+                           style="position: relative">
+                    <thead>
+                        <tr style="position: sticky">
                             <th>期数</th>
                             {% if mark == 1 %}
                                 {% for i in head %}
@@ -119,8 +121,7 @@
                             {% endif %}
 
                         </tr>
-                        </thead>
-
+                    </thead>
                         <tbody>
                         {% for i in records %}
                             <tr>

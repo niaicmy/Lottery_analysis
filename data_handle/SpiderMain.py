@@ -15,16 +15,16 @@ def openconfig(path, update=None):
                 json.dump(update, fp, indent=2)
                 fp.close()
                 # print(path + " : update done")
-        except IOError as e:
-            print(path + " : update file fail !" + e)
+        except IOError:
+            print(path + " : update file fail !")
     else:
         try:
             with open(file=path, mode=r"r", encoding=r"utf-8") as fp:
                 mycon = json.load(fp)
                 fp.close()
                 # print(path + " : open done")
-        except IOError as e:
-            print(path + " : open file fail !" + e)
+        except IOError:
+            print(path + " : open file fail !")
         else:
             return mycon
 
@@ -48,7 +48,7 @@ def get_proxy(config):
     if "" == t["user"]:
         proxy[str(t["mold"]).lower()] = str(t["mold"]).lower() + r"://" + t["host"] + ":" + t["port"]
     else:
-        proxy[str(t["mold"]).lower()] = str(t["mold"]).lower() + r"://" + t["user"] + t["pwd"]\
+        proxy[str(t["mold"]).lower()] = str(t["mold"]).lower() + r"://" + t["user"] + t["pwd"] \
                                         + "@" + t["host"] + ":" + t["port"]
     # print(proxy)
     return proxy
@@ -59,6 +59,8 @@ def get_parser(config, who="lottery"):
     t["url"] = config["parser"][who]["url"]
     t["path"] = config["parser"][who]["path"]
     return t
+
+
 # class DownLoader(object):
 #     def __init__(self, url=None):
 #         if url:
@@ -116,7 +118,10 @@ def parser(who, num):
     if "lottery" == who:
         # 表示取的期数
         try:
-            req = requests.get(par["url"].format(num), timeout=5, headers=get_header(config), proxies=get_proxy(config))
+            # req = requests.get(par["url"].format(num), timeout=5, headers=get_header(config),
+            # proxies=get_proxy(config))
+            # 去除代理
+            req = requests.get(par["url"].format(num), timeout=5, headers=get_header(config))
         except requests.exceptions.Timeout:
             return None
         except requests.exceptions.ConnectionError:
@@ -136,7 +141,7 @@ def parser(who, num):
                 else:
                     # req.close()
                     return li
-            elif req.status_code == 404:    # 返回404
+            elif req.status_code == 404:  # 返回404
                 # req.close()
                 return None
 

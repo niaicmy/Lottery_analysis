@@ -4,7 +4,9 @@ from django.http import Http404
 from django.urls import reverse
 from data_handle.SpiderMain import parser
 from data_handle.MainHandle import main_handle
+from Lottery_analysis.settings import BASE_DIR
 from .models import SsqInfo, SsqOrig
+import json
 
 # import time
 
@@ -34,7 +36,8 @@ ssq_orig_all = SsqOrig.objects.all().values_list()
 
 # 以下是分页机制 ================================================
 # page_limit : 每一页显示数据量
-page_limit = 15
+# page_limit = 15
+page_limit = 35
 
 
 # page_limit = 2
@@ -79,8 +82,8 @@ def update(request):
     global ssq_orig_all, ssq_info_all, page_total
     # 17155 -- 18001
     message = "Update fail !"
-    # 最先更新 proxy
-    parser("proxy", 1)
+    # 最先更新 proxy  代理网站有问题 不用代理了
+    # parser("proxy", 1)
     # ssq_num 代表开奖期数
     # ssq_num = ssq_num_all[len(ssq_num_all) - 1][0]
     ssq_num = ssq_orig_all[0][0]
@@ -261,6 +264,7 @@ def composite_data(request):
     data = dict(request.POST)
     # print(data)
 
+    # 给页面的数据字典 result
     result = dict()
     result["head"] = head
     result["info"] = ''
@@ -272,15 +276,44 @@ def composite_data(request):
     # print(blue_t)
     s_sum = int(data.get("ssum", None)[0])
     m_sum = int(data.get("msum", None)[0])
-    # print(s_sum)
-    # print(m_sum)
-    red_list = []
-    blue_list = []
-
     # 和值范围的表示 sum_list
     sum_list = [s_sum] + [m_sum]
     sum_list.sort()
     # print(sum_list)
+    # print(s_sum)
+    # print(m_sum)
+
+    # 设置期数为下一期 data_key
+    data_key = str(ssq_orig_all[0][0] + 1)
+    # print(ssq_orig_all[0])
+    # print(data_key)
+    data_values = {"red_list": red_t, "blue_list": blue_t, "sum_list": sum_list}
+
+    # log_data[data_key] = dict(data_values)
+    # 设置一个 每一期提交组合原始数据的 log
+    path = r"\ssq_analysis\data_log.json"
+    # log_data = {}
+
+    try:
+        with open(file=BASE_DIR + path, mode=r"r", encoding=r"utf-8") as log:
+            # log 数据的字典
+            log_data = dict(json.load(log))
+            # print(log_data)
+            log_data[data_key] = dict(data_values)
+
+            # json.dump(log_data, log, indent=2)
+            log.close()
+
+        with open(file=BASE_DIR + path, mode=r"w", encoding=r"utf-8") as log:
+            json.dump(log_data, log, indent=2)
+            log.close()
+
+    except IOError:
+        print(path + " : update file fail !")
+
+    # 传递给排序函数的数组
+    red_list = []
+    blue_list = []
 
     for i in red_t:
         if i in lt10:

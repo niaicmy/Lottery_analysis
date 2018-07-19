@@ -58,7 +58,9 @@ ROOT_URLCONF = 'Lottery_analysis.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [os.path.join(BASE_DIR, 'templates')],
+        'DIRS': [os.path.join(BASE_DIR, 'templates'),
+                 os.path.join(BASE_DIR, 'ssq_analysis/templates'),
+                 ],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -135,6 +137,6 @@ STATICFILES_DIRS = (
     os.path.join(BASE_DIR, 'statics'),
 )
 
-TEMPLATE_DIRS = (
-    os.path.join(BASE_DIR, 'ssq_analysis/templates'),
-)
+# TEMPLATE_DIRS = (
+#     os.path.join(BASE_DIR, 'ssq_analysis/templates'),
+# )
